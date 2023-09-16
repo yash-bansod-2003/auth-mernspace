@@ -1,0 +1,25 @@
+{
+  "name": "templete-node-ts-express-jest",
+  "version": "1.0.0",
+  "description": "a best practice templete for follow industries standards and clean code",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/yash-bansod-2003/templete-node-express-ts-jest.git"
+  },
+  "keywords": [
+    "node",
+    "express",
+    "typescript",
+    "jest"
+  ],
+  "author": "yash gajanan bansod",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yash-bansod-2003/templete-node-express-ts-jest/issues"
+  },
+  "homepage": "https://github.com/yash-bansod-2003/templete-node-express-ts-jest#readme"
+}
