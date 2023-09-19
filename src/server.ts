@@ -1,9 +1,16 @@
-const greet = (): string => {
-    const user = {
-        name: "Yash Gajanan Bansod",
-        age: 20,
-    };
-    return `Hello ${user.name}`;
+import app from "./app";
+import { CONFIG } from "./config";
+import logger from "./config/logger";
+
+const startServer = () => {
+    try {
+        app.listen(CONFIG.PORT, () =>
+            logger.info(`Listening on port ${CONFIG.PORT}`),
+        );
+    } catch (error) {
+        logger.error(error);
+        process.exit(1);
+    }
 };
 
-greet();
+startServer();
