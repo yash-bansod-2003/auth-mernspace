@@ -1,8 +1,8 @@
 import { describe, expect, test } from "@jest/globals";
 import request from "supertest";
 
-import { sum, calculateDiscount } from "./src/app";
-import app from "./src/app";
+import { sum, calculateDiscount } from "../app";
+import app from "../app";
 
 describe("App", () => {
     test("adds 1 + 2 to equal 3", () => {
