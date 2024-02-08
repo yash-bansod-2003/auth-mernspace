@@ -1,20 +1,40 @@
-/* eslint-env node */
+/** @type {import("eslint").Linter.Config} */
+
+const { resolve } = require("node:path");
+
+const project = resolve(process.cwd(), "tsconfig.json");
+
 module.exports = {
     extends: [
-        "eslint:recommended",
-        "plugin:@typescript-eslint/recommended-type-checked",
-        "prettier",
-    ],
+        "@vercel/style-guide/eslint/node",
+        "@vercel/style-guide/eslint/typescript",
+    ].map(require.resolve),
     parser: "@typescript-eslint/parser",
-    plugins: ["@typescript-eslint"],
-    ignorePatterns: [".eslintrc.cjs"],
     parserOptions: {
         project: true,
-        tsconfigRootDir: __dirname,
     },
-    root: true,
+    env: {
+        node: true,
+        es6: true,
+    },
+    plugins: ["only-warn"],
+    settings: {
+        "import/resolver": {
+            typescript: {
+                project,
+            },
+        },
+    },
+    overrides: [
+        {
+            files: ["**/__tests__/**/*"],
+            env: {
+                jest: true,
+            },
+        },
+    ],
+    ignorePatterns: ["node_modules/", "dist/"],
     rules: {
-        "no-console": "error",
-        "dot-notation": "error",
+        "import/no-default-export": "off",
     },
 };

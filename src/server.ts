@@ -1,16 +1,20 @@
-import app from "./app";
-import { CONFIG } from "./config";
-import logger from "./config/logger";
+import express, { type Express, urlencoded, json } from "express";
+import morgan from "morgan";
+import cors from "cors";
 
-const startServer = () => {
-    try {
-        app.listen(CONFIG.PORT, () =>
-            logger.info(`Listening on port ${CONFIG.PORT}`),
-        );
-    } catch (error) {
-        logger.error(error);
-        process.exit(1);
-    }
+export const createServer = (): Express => {
+    const app = express();
+    app.disable("x-powered-by")
+        .use(morgan("dev"))
+        .use(urlencoded({ extended: true }))
+        .use(json())
+        .use(cors())
+        .get("/status", (_, res) => {
+            return res.json({ ok: true });
+        })
+        .get("/message/:name", (req, res) => {
+            return res.json({ message: `hello ${req.params.name}` });
+        });
+
+    return app;
 };
-
-startServer();

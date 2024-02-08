@@ -1,17 +1,14 @@
-import winston from "winston";
+import { createLogger, transports, format } from "winston";
 
-const logger = winston.createLogger({
+const logger = createLogger({
     level: "info",
     defaultMeta: { serviceName: "templete" },
     transports: [
-        new winston.transports.Console({
+        new transports.Console({
             level: "info",
-            format: winston.format.combine(
-                winston.format.timestamp(),
-                winston.format.simple(),
-            ),
+            format: format.combine(format.timestamp(), format.simple()),
         }),
     ],
 });
 
-export default logger;
+export { logger };
