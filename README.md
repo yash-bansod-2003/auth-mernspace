@@ -20,5 +20,5 @@ sudo apt install git
 # Clone Repository Locally
 
 ```bash
-git clone git@github.com:yash-bansod-2003/node-jest-typescript-starter.git
+git clone git@github.com:yash-bansod-2003/starter-node.git
 ```
