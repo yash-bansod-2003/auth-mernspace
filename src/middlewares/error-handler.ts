@@ -1,6 +1,6 @@
 import type { Request, Response, NextFunction } from "express";
 import type { HttpError } from "http-errors";
-import { logger } from "../config/logger";
+import { logger } from "@/config/logger";
 
 const errorHandler = (
     err: HttpError,
