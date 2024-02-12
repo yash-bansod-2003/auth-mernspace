@@ -9,8 +9,8 @@ module.exports = {
     require.resolve("@vercel/style-guide/eslint/node"),
     require.resolve("@vercel/style-guide/eslint/typescript"),
     require.resolve("@vercel/style-guide/eslint/jest"),
-    'eslint:recommended',
-    'plugin:@typescript-eslint/recommended-type-checked',
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended-type-checked",
   ],
   parser: "@typescript-eslint/parser",
   parserOptions: {
