@@ -17,7 +17,6 @@ module.exports = {
     node: true,
     es6: true,
   },
-  plugins: ["only-warn"],
   settings: {
     "import/resolver": {
       typescript: {

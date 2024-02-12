@@ -2,7 +2,7 @@ import { createServer } from "@/server";
 import { logger } from "@/config/logger";
 import { CONFIG } from "@/config";
 
-const port = CONFIG.PORT || 5001;
+const port = CONFIG.PORT ?? 5001;
 const server = createServer();
 
 server.listen(port, () => {
