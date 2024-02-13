@@ -1,6 +1,7 @@
 /** @type {import('ts-jest').JestConfigWithTsJest} */
 
 module.exports = {
+  displayName: "Node Typescript Starter",
   roots: ["<rootDir>"],
   transform: {
     "^.+\\.tsx?$": "ts-jest",
@@ -15,4 +16,5 @@ module.exports = {
     "^@/(.*)$": "<rootDir>/src/$1",
   },
   preset: "ts-jest",
+  testEnvironment: "node",
 };
