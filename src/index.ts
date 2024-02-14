@@ -2,10 +2,12 @@ import { createServer } from "@/server";
 import { logger } from "@/config/logger";
 import { CONFIG } from "@/config";
 
-const port = CONFIG.PORT ?? 5001;
+const host = CONFIG.HOST ?? "localhost";
+const port = CONFIG.PORT ? Number(CONFIG.PORT) : 5001;
+
 const server = createServer();
 
-server.listen(port, () => {
+server.listen(port, host, () => {
   try {
     logger.info(`Server Listening on port ${port}`);
   } catch (error) {
