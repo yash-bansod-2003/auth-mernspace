@@ -20,6 +20,9 @@ export const createServer = (): Express => {
     .get("/message/:name", (req, res) => {
       return res.json({ message: `hello ${req.params.name}` });
     })
+    .post("/todo", (req, res) => {
+      return res.status(201).json({ message: `todu` });
+    })
     .use(errorHandler);
 
   return app;
