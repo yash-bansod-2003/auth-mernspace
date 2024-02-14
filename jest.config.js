@@ -15,6 +15,7 @@ module.exports = {
   moduleNameMapper: {
     "^@/(.*)$": "<rootDir>/src/$1",
   },
+  testPathIgnorePatterns: ["<rootDir>/e2e"],
   preset: "ts-jest",
   testEnvironment: "node",
 };
