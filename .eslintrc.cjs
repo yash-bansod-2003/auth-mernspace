@@ -37,5 +37,6 @@ module.exports = {
   ignorePatterns: ["node_modules/", "dist/", ".eslintrc.*"],
   rules: {
     "import/no-default-export": "off",
+    "@typescript-eslint/no-misused-promises": "off",
   },
 };
