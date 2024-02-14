@@ -8,6 +8,6 @@ config({
   ),
 });
 
-const { PORT, NODE_ENV, HOST } = process.env;
+const { PORT, NODE_ENV, HOST, DB_URL } = process.env;
 
-export const CONFIG = { PORT, NODE_ENV, HOST };
+export const CONFIG = { PORT, NODE_ENV, HOST, DB_URL };
