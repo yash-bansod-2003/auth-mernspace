@@ -26,7 +26,7 @@ describe("Todo", () => {
     }
   });
 
-  describe("POST /todo", () => {
+  describe("POST /todos", () => {
     it("should create new todo", async () => {
       const data: Todo = {
         title: "Do Homework",
@@ -35,7 +35,7 @@ describe("Todo", () => {
       };
 
       await supertest(createServer())
-        .post("/todo")
+        .post("/todos")
         .send(data)
         .expect(201)
         .then((res) => {

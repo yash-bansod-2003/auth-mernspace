@@ -2,8 +2,7 @@ import express, { type Express, urlencoded, json } from "express";
 import morgan from "morgan";
 import cors from "cors";
 import { errorHandler } from "@/middlewares/error-handler";
-import { TodoModel } from "@/models/todo";
-import { logger } from "@/config/logger";
+import { todoRouter } from "@/routes/todo.route";
 
 export const createServer = (): Express => {
   const app = express();
@@ -22,11 +21,7 @@ export const createServer = (): Express => {
     .get("/message/:name", (req, res) => {
       return res.json({ message: `hello ${req.params.name}` });
     })
-    .post("/todo", async (req, res) => {
-      const todo = await TodoModel.create(req.body);
-      logger.debug("created todo", todo);
-      return res.status(201).json(todo);
-    })
+    .use(todoRouter)
     .use(errorHandler);
 
   return app;
