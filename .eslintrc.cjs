@@ -34,7 +34,7 @@ module.exports = {
       },
     },
   ],
-  ignorePatterns: ["node_modules/", "dist/", ".eslintrc.*"],
+  ignorePatterns: ["node_modules/", "dist/", ".eslintrc.*", "jest.config.*"],
   rules: {
     "import/no-default-export": "off",
     "@typescript-eslint/no-misused-promises": "off",

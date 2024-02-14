@@ -4,7 +4,7 @@ import { CONFIG } from "@/config";
 import { connectToDatabase } from "@/lib/db";
 
 const host = CONFIG.HOST ?? "localhost";
-const port = CONFIG.PORT ? Number(CONFIG.PORT) : 5001;
+const port = CONFIG.PORT ? Number(CONFIG.PORT) : 3000;
 
 const server = createServer();
 
