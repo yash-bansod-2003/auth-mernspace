@@ -14,7 +14,7 @@
     "lint:fix": "eslint src/ --fix",
     "test": "jest --no-cache --coverage --all --runInBand --detectOpenHandles",
     "test:watch": "jest --watch",
-    "test:e2e": "jest e2e --config=e2e/jest.config.js",
+    "test:e2e": "jest e2e --config=e2e/jest.config.js --detectOpenHandles",
     "prepare": "husky",
     "commitlint": "commitlint --edit"
   },
