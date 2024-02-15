@@ -1,16 +1,21 @@
 import type { Request, Response, NextFunction } from "express";
-import type { HttpError } from "http-errors";
+import { HttpError } from "http-errors";
 import { logger } from "@/config/logger";
 
 const errorHandler = (
-  err: HttpError,
+  err: HttpError | Error,
   req: Request,
   res: Response,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _: NextFunction,
 ): void => {
   logger.error(err);
-  const statusCode = err.statusCode || 500;
+  let statusCode = 500;
+
+  if (err instanceof HttpError) {
+    statusCode = err.statusCode;
+  }
+
   res.status(statusCode).json({
     errors: [
       {

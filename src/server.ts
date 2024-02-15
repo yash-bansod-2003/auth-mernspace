@@ -12,9 +12,6 @@ export const createServer = (): Express => {
     .use(urlencoded({ extended: true }))
     .use(json())
     .use(cors())
-    .post("/sample", (_, res) => {
-      return res.status(201).json({ ok: true });
-    })
     .get("/status", (_, res) => {
       return res.json({ ok: true });
     })
