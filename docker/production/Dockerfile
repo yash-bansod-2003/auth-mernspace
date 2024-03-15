@@ -1,26 +1,24 @@
 FROM node:20 as builder
 
-WORKDIR /app
+WORKDIR /build
 
 COPY package*.json ./
-
-RUN npm ci
 
 COPY . .
 
+RUN npm install
+
 RUN npm run build
 
-FROM node:20 as production
-
-ENV NODE_ENV=production
+FROM node:20 as runner
 
 WORKDIR /app
 
-COPY package*.json ./
+COPY --from=builder /build/package*.json ./
 
-RUN npm ci --ignore-scripts
+RUN npm install --only=production
 
-COPY  --from=builder /app/dist ./
+COPY --from=builder /build/dist ./dist/
 
 EXPOSE 5001
 
