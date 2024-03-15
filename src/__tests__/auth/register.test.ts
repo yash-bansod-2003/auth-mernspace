@@ -80,6 +80,22 @@ describe("auth register", () => {
       expect(users[0].email).toBe(userData.email);
     });
 
-    it.todo("should return id of persisted user");
+    it("should return id of persisted user", async () => {
+      const userData: UserData = {
+        firstName: "yash",
+        lastName: "bansod",
+        email: "test@example.com",
+        password: "secret",
+      };
+
+      await supertest(createServer())
+        .post("/api/auth/register")
+        .send(userData)
+        .expect(201)
+        .expect("Content-Type", /json/)
+        .then((res) => {
+          expect((res.body as unknown as { id: string }).id).toBeDefined();
+        });
+    });
   });
 });

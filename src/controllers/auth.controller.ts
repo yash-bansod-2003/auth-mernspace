@@ -34,7 +34,7 @@ class AuthController {
 
       this.logger.info("User has been registered", { id: user.id });
 
-      return res.status(201).json(user);
+      return res.status(201).json({ id: user.id });
     } catch (error) {
       return next(error);
     }
