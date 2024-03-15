@@ -2,12 +2,12 @@
   "$schema": "https://json.schemastore.org/tsconfig",
   "display": "Default",
   "compilerOptions": {
-    "target": "ESNext",
-    "lib": ["ES6"],
+    "target": "ES5",
+    "lib": ["ES5", "ES6"],
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
+    "module": "CommonJS",
+    "moduleResolution": "Node",
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
