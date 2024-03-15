@@ -1,6 +1,7 @@
 import { User } from "@/entity/user";
 import { Repository } from "typeorm";
 import { UserData } from "@/types";
+import createHttpError from "http-errors";
 
 class AuthService {
   constructor(private userRepository: Repository<User>) {
@@ -8,12 +9,17 @@ class AuthService {
   }
 
   async create({ firstName, lastName, email, password }: UserData) {
-    return await this.userRepository.save({
-      firstName,
-      lastName,
-      email,
-      password,
-    });
+    try {
+      return await this.userRepository.save({
+        firstName,
+        lastName,
+        email,
+        password,
+      });
+    } catch (err) {
+      const error = createHttpError(500, "failed to store data in database");
+      throw error;
+    }
   }
 }
 

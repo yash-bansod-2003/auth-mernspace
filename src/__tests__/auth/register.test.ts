@@ -79,5 +79,7 @@ describe("auth register", () => {
       expect(users[0].lastName).toBe(userData.lastName);
       expect(users[0].email).toBe(userData.email);
     });
+
+    it.todo("should return id of persisted user");
   });
 });
