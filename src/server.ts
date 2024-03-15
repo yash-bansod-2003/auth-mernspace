@@ -2,6 +2,7 @@ import express, { type Express, urlencoded, json } from "express";
 import morgan from "morgan";
 import cors from "cors";
 import { errorHandler } from "@/middlewares/error-handler";
+import { authRouter } from "@/routes/auth.router";
 
 export const createServer = (): Express => {
   const app = express();
@@ -17,6 +18,7 @@ export const createServer = (): Express => {
     .get("/message/:name", (req, res) => {
       return res.json({ message: `hello ${req.params.name}` });
     })
+    .use("/api/auth", authRouter)
     .use(errorHandler);
 
   return app;

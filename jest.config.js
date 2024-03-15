@@ -1,7 +1,7 @@
 /** @type {import('ts-jest').JestConfigWithTsJest} */
 
 module.exports = {
-  displayName: "Node Typescript Starter",
+  displayName: "Mernspace Auth Service",
   roots: ["<rootDir>"],
   transform: {
     "^.+\\.tsx?$": "ts-jest",

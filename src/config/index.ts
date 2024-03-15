@@ -8,6 +8,24 @@ config({
   ),
 });
 
-const { PORT, NODE_ENV, HOST, DB_URL } = process.env;
+const {
+  PORT,
+  NODE_ENV,
+  HOST,
+  DATABASE_HOST,
+  DATABASE_PORT,
+  DATABASE_USERNAME,
+  DATABASE_PASSWORD,
+  DATABASE_NAME,
+} = process.env;
 
-export const CONFIG = { PORT, NODE_ENV, HOST, DB_URL };
+export const CONFIG = {
+  PORT,
+  NODE_ENV,
+  HOST,
+  DATABASE_HOST,
+  DATABASE_PORT,
+  DATABASE_USERNAME,
+  DATABASE_PASSWORD,
+  DATABASE_NAME,
+};

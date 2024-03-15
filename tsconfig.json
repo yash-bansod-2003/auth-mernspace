@@ -20,7 +20,7 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
-    "strictPropertyInitialization": true,
+    "strictPropertyInitialization": false,
     "skipLibCheck": true,
     "noImplicitAny": false,
     "strictNullChecks": true,
