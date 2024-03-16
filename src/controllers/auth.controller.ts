@@ -25,14 +25,14 @@ class AuthController {
 
     const { firstName, lastName, email, password, role } = req.body;
 
-    try {
-      this.logger.debug("new request to create a user", {
-        firstName,
-        lastName,
-        email,
-        role,
-      });
+    this.logger.debug("new request to create a user", {
+      firstName,
+      lastName,
+      email,
+      role,
+    });
 
+    try {
       const user = await this.authService.create({
         firstName,
         lastName,
@@ -43,6 +43,22 @@ class AuthController {
 
       this.logger.info("User has been registered", { id: user.id });
 
+      const oneHour = 1000 * 60 * 60;
+      res.cookie("accessToken", "token", {
+        httpOnly: true,
+        domain: "localhost",
+        sameSite: "strict",
+        maxAge: oneHour,
+      });
+
+      const oneYear = 1000 * 60 * 60 * 24 * 365;
+
+      res.cookie("refreshToken", "token", {
+        httpOnly: true,
+        domain: "localhost",
+        sameSite: "strict",
+        maxAge: oneYear,
+      });
       return res.status(201).json({ id: user.id });
     } catch (error) {
       return next(error);

@@ -199,5 +199,76 @@ describe("auth register", () => {
 
       expect(users).toHaveLength(0);
     });
+
+    it.todo(
+      "should return 422 (Unprocessable Entity) if firstName filed is missing",
+    );
+    it.todo(
+      "should return 422 (Unprocessable Entity) if lastName filed is missing",
+    );
+
+    it("should trim email field", async () => {
+      const userData: UserData = {
+        firstName: "yash",
+        lastName: "bansod",
+        email: " test@example.com ",
+        password: "secret",
+      };
+
+      await supertest(createServer())
+        .post("/api/auth/register")
+        .send(userData)
+        .expect(201);
+
+      const userRepository = connection.getRepository(User);
+      const users = await userRepository.find();
+
+      expect(users[0].email).toBe(userData.email.trim());
+      expect(users).toHaveLength(1);
+    });
+
+    it("should return accessToken in cookies", async () => {
+      const userData: UserData = {
+        firstName: "yash",
+        lastName: "bansod",
+        email: " test@example.com ",
+        password: "secret",
+      };
+
+      await supertest(createServer())
+        .post("/api/auth/register")
+        .send(userData)
+        .expect(201)
+        .then((res) => {
+          expect(res.headers["set-cookie"]).toBeDefined();
+          expect(
+            (res.headers["set-cookie"] as unknown as []).some(
+              (cookie: string) => cookie.includes("accessToken"),
+            ),
+          ).toBe(true);
+        });
+    });
+
+    it("should return refreshToken in cookies", async () => {
+      const userData: UserData = {
+        firstName: "yash",
+        lastName: "bansod",
+        email: " test@example.com ",
+        password: "secret",
+      };
+
+      await supertest(createServer())
+        .post("/api/auth/register")
+        .send(userData)
+        .expect(201)
+        .then((res) => {
+          expect(res.headers["set-cookie"]).toBeDefined();
+          expect(
+            (res.headers["set-cookie"] as unknown as []).some(
+              (cookie: string) => cookie.includes("refreshToken"),
+            ),
+          ).toBe(true);
+        });
+    });
   });
 });
