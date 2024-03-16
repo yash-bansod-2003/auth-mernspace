@@ -136,6 +136,16 @@ class AuthController {
       return next(error);
     }
   }
+
+  self(req: Request, res: Response, next: NextFunction) {
+    this.logger.debug("new request to self data");
+
+    try {
+      return res.json({ id: 1 });
+    } catch (error) {
+      return next(error);
+    }
+  }
 }
 
 export { AuthController };

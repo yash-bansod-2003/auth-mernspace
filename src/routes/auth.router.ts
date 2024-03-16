@@ -28,4 +28,6 @@ router.post(
   authController.login.bind(authController),
 );
 
+router.get("/self", authController.self.bind(authController));
+
 export { router as authRouter };

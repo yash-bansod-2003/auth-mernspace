@@ -19,6 +19,10 @@ describe("auth register", () => {
     await connection.synchronize();
   });
 
+  afterEach(async () => {
+    await connection.dropDatabase();
+  });
+
   afterAll(async () => {
     await connection.destroy();
   });
