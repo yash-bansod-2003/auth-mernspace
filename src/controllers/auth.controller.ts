@@ -7,6 +7,8 @@ import Jwt, { sign } from "jsonwebtoken";
 import fs from "node:fs";
 import path from "node:path";
 import { CONFIG } from "@/config";
+import { AppDataSource } from "@/data-source";
+import { RefreshToken } from "@/entity/refresh-token";
 
 interface AuthRegisterRequest extends Request {
   body: UserData;
@@ -62,10 +64,20 @@ class AuthController {
         issuer: "auth-service",
       });
 
+      const refreshTokenRepository = AppDataSource.getRepository(RefreshToken);
+
+      const MS_IN_YEAR = 1000 * 60 * 60 * 24 * 365;
+
+      const newRefreshToken = await refreshTokenRepository.save({
+        user: user,
+        expires_at: new Date(Date.now() + MS_IN_YEAR),
+      });
+
       const refreshToken = sign(payload, CONFIG.REFRESH_TOKEN_SECRET!, {
         algorithm: "HS256",
         expiresIn: "1y",
         issuer: "auth-service",
+        jwtid: String(newRefreshToken.id),
       });
 
       res.cookie("accessToken", accessToken, {

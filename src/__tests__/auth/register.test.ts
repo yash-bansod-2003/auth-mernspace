@@ -5,6 +5,7 @@ import { AppDataSource } from "@/data-source";
 import { User } from "@/entity/user";
 import { type UserData } from "@/types";
 import { UserRoles } from "@/constants";
+import { RefreshToken } from "@/entity/refresh-token";
 
 describe("auth register", () => {
   let connection: DataSource;
@@ -269,6 +270,31 @@ describe("auth register", () => {
             ),
           ).toBe(true);
         });
+    });
+
+    it("should return refreshToken in cookies", async () => {
+      const userData: UserData = {
+        firstName: "yash",
+        lastName: "bansod",
+        email: " test@example.com ",
+        password: "secret",
+      };
+
+      const response = await supertest(createServer())
+        .post("/api/auth/register")
+        .send(userData)
+        .expect(201);
+
+      const refreshTokenRepository = connection.getRepository(RefreshToken);
+
+      const tokens = refreshTokenRepository
+        .createQueryBuilder("refreshToken")
+        .where("refreshToken.userId = :userId", {
+          userId: (response.body as Record<string, string>).id,
+        })
+        .getMany();
+
+      expect(tokens).toHaveLength(1);
     });
   });
 });
