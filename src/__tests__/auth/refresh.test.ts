@@ -29,8 +29,6 @@ describe("auth refresh", () => {
 
   describe("post /api/auth/refresh", () => {
     it("should return status 200", async () => {
-      // const accessToken = jwks.token({ sub: "1", role: UserRoles.CUSTOMER });
-
       await supertest(createServer())
         .post("/api/auth/refresh")
         .expect(200)

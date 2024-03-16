@@ -5,6 +5,7 @@ import { Logger } from "winston";
 import { validationResult } from "express-validator";
 import Jwt from "jsonwebtoken";
 import { TokenService } from "@/services/token.service";
+import createHttpError from "http-errors";
 
 interface AuthRegisterRequest extends Request {
   body: UserData;
@@ -18,6 +19,7 @@ export interface AuthSelfRequest extends Request {
   auth: {
     sub: string;
     role: string;
+    jti: string;
   };
 }
 
@@ -155,11 +157,47 @@ class AuthController {
     }
   }
 
-  refresh(req: Request, res: Response, next: NextFunction) {
+  async refresh(req: AuthSelfRequest, res: Response, next: NextFunction) {
     this.logger.debug("new request for refresh token");
 
     try {
-      return res.json();
+      const payload: Jwt.JwtPayload = {
+        sub: req.auth.sub,
+        role: req.auth.role,
+      };
+
+      const user = await this.authService.me({ id: Number(req.auth.sub) });
+
+      if (!user) {
+        return next(createHttpError(500));
+      }
+
+      const newRefreshToken = await this.tokenService.persistRefreshToken(user);
+
+      await this.tokenService.removeRefreshToken(Number(req.auth.jti));
+
+      const accessToken = this.tokenService.generateAccessToken(payload);
+
+      const refreshToken = this.tokenService.generateRefreshToken(
+        payload,
+        newRefreshToken.id,
+      );
+
+      res.cookie("accessToken", accessToken, {
+        httpOnly: true,
+        domain: "localhost",
+        sameSite: "strict",
+        maxAge: 1000 * 60 * 60,
+      });
+
+      res.cookie("refreshToken", refreshToken, {
+        httpOnly: true,
+        domain: "localhost",
+        sameSite: "strict",
+        maxAge: 1000 * 60 * 60 * 24 * 365,
+      });
+
+      return res.json({ id: user.id });
     } catch (error) {
       return next(error);
     }

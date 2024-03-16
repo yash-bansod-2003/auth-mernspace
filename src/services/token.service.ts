@@ -51,6 +51,15 @@ class TokenService {
     });
     return newRefreshToken;
   }
+
+  async removeRefreshToken(id: number) {
+    try {
+      await this.refreshTokenRepository.delete({ id });
+    } catch (error) {
+      const err = createHttpError(500, "cant delete refresh token");
+      throw err;
+    }
+  }
 }
 
 export { TokenService };

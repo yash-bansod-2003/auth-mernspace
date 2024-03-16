@@ -41,7 +41,9 @@ router.get(
 router.post(
   "/refresh",
   validateRefreshToken,
-  authController.refresh.bind(authController),
+  async (req: Request, res: Response, next: NextFunction) => {
+    await authController.refresh(req as AuthSelfRequest, res, next);
+  },
 );
 
 export { router as authRouter };
