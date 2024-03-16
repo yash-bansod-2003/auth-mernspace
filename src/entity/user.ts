@@ -1,5 +1,6 @@
 import { UserRoles } from "../constants";
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm";
+import { Tenant } from "./tenant";
 
 @Entity({ name: "users" })
 export class User {
@@ -20,4 +21,7 @@ export class User {
 
   @Column({ default: UserRoles.CUSTOMER })
   role: string;
+
+  @ManyToOne(() => Tenant)
+  tenant: Tenant;
 }
