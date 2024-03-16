@@ -61,6 +61,12 @@ class AuthController {
         issuer: "auth-service",
       });
 
+      const refreshToken = sign(payload, "secret", {
+        algorithm: "HS256",
+        expiresIn: "1y",
+        issuer: "auth-service",
+      });
+
       res.cookie("accessToken", accessToken, {
         httpOnly: true,
         domain: "localhost",
@@ -68,7 +74,7 @@ class AuthController {
         maxAge: 1000 * 60 * 60,
       });
 
-      res.cookie("refreshToken", "token", {
+      res.cookie("refreshToken", refreshToken, {
         httpOnly: true,
         domain: "localhost",
         sameSite: "strict",
