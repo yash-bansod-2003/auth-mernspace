@@ -4,8 +4,6 @@ import { UserData } from "@/types";
 import { Logger } from "winston";
 import { validationResult } from "express-validator";
 import Jwt from "jsonwebtoken";
-import { AppDataSource } from "@/data-source";
-import { RefreshToken } from "@/entity/refresh-token";
 import { TokenService } from "@/services/token.service";
 
 interface AuthRegisterRequest extends Request {
@@ -54,14 +52,7 @@ class AuthController {
         role: user.role,
       };
 
-      const refreshTokenRepository = AppDataSource.getRepository(RefreshToken);
-
-      const MS_IN_YEAR = 1000 * 60 * 60 * 24 * 365;
-
-      const newRefreshToken = await refreshTokenRepository.save({
-        user: user,
-        expires_at: new Date(Date.now() + MS_IN_YEAR),
-      });
+      const newRefreshToken = await this.tokenService.persistRefreshToken(user);
 
       const accessToken = this.tokenService.generateAccessToken(payload);
 

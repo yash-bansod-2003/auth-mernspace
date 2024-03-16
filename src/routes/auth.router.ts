@@ -6,12 +6,14 @@ import { User } from "@/entity/user";
 import { logger } from "@/config/logger";
 import { registerValidator } from "@/lib/validators/auth";
 import { TokenService } from "@/services/token.service";
+import { RefreshToken } from "@/entity/refresh-token";
 
 const router = express.Router();
 
 const userRepository = AppDataSource.getRepository(User);
+const refreshTokenRepository = AppDataSource.getRepository(RefreshToken);
 const authService = new AuthService(userRepository);
-const tokenService = new TokenService();
+const tokenService = new TokenService(refreshTokenRepository);
 const authController = new AuthController(authService, tokenService, logger);
 
 router.post(
