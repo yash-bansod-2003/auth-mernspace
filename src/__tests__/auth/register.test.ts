@@ -181,5 +181,23 @@ describe("auth register", () => {
 
       expect(users).toHaveLength(0);
     });
+
+    it("should return 422 (Unprocessable Entity) if password filed is missing", async () => {
+      const userData: Omit<UserData, "password"> = {
+        firstName: "yash",
+        lastName: "bansod",
+        email: "test@example.com",
+      };
+
+      await supertest(createServer())
+        .post("/api/auth/register")
+        .send(userData)
+        .expect(400);
+
+      const userRepository = connection.getRepository(User);
+      const users = await userRepository.find();
+
+      expect(users).toHaveLength(0);
+    });
   });
 });
