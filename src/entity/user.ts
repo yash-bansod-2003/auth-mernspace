@@ -1,3 +1,4 @@
+import { UserRoles } from "@/constants";
 import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
 
 @Entity()
@@ -17,6 +18,6 @@ export class User {
   @Column()
   password: string;
 
-  @Column()
+  @Column({ default: UserRoles.CUSTOMER })
   role: string;
 }
