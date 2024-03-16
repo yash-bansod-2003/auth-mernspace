@@ -68,5 +68,34 @@ describe("auth self", () => {
           expect((res.body as Record<string, string>).id).toBe(user.id);
         });
     });
+
+    it("should not return password in user data", async () => {
+      // Register the user
+      const userData = {
+        firstName: "yash",
+        lastName: "bansod",
+        email: "test@example.com",
+        password: "secret",
+      };
+
+      const userRepository = connection.getRepository(User);
+      const user = await userRepository.save({
+        ...userData,
+        role: UserRoles.CUSTOMER,
+      });
+
+      // Generate token
+      const accessToken = jwks.token({ sub: String(user.id), role: user.role });
+
+      await supertest(createServer())
+        .get("/api/auth/self")
+        .set("Cookie", [`accessToken=${accessToken}`])
+        .expect(200)
+        .then((res) => {
+          expect(
+            (res.body as Record<string, string>).password,
+          ).not.toBeDefined();
+        });
+    });
   });
 });

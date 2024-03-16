@@ -149,7 +149,7 @@ class AuthController {
 
     try {
       const user = await this.authService.me({ id: Number(req.auth.sub) });
-      return res.json(user);
+      return res.json({ ...user, password: undefined });
     } catch (error) {
       return next(error);
     }
