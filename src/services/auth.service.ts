@@ -11,10 +11,17 @@ class AuthService {
   }
 
   async create({ firstName, lastName, email, password }: UserData) {
-    const saltRounds = 10;
-    const hashedPassword = await bcrypt.hash(password, saltRounds);
+    const user = await this.userRepository.findOne({ where: { email } });
+
+    if (user) {
+      const error = createHttpError(409, "email already exists");
+      throw error;
+    }
 
     try {
+      const saltRounds = 10;
+      const hashedPassword = await bcrypt.hash(password, saltRounds);
+
       return await this.userRepository.save({
         firstName,
         lastName,

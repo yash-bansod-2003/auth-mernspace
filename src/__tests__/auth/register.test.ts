@@ -139,5 +139,47 @@ describe("auth register", () => {
       expect(users[0].password).toHaveLength(60);
       expect(users[0].password).toMatch(/\$2b\$\d+\$/);
     });
+
+    it("should return 409 conflict if email already exists", async () => {
+      const userData: UserData = {
+        firstName: "yash",
+        lastName: "bansod",
+        email: "test@example.com",
+        password: "secret",
+      };
+
+      await supertest(createServer())
+        .post("/api/auth/register")
+        .send(userData)
+        .expect(201);
+
+      await supertest(createServer())
+        .post("/api/auth/register")
+        .send(userData)
+        .expect(409);
+
+      const userRepository = connection.getRepository(User);
+      const users = await userRepository.find();
+
+      expect(users).toHaveLength(1);
+    });
+
+    it("should return 422 (Unprocessable Entity) if email filed is missing", async () => {
+      const userData: Omit<UserData, "email"> = {
+        firstName: "yash",
+        lastName: "bansod",
+        password: "secret",
+      };
+
+      await supertest(createServer())
+        .post("/api/auth/register")
+        .send(userData)
+        .expect(400);
+
+      const userRepository = connection.getRepository(User);
+      const users = await userRepository.find();
+
+      expect(users).toHaveLength(0);
+    });
   });
 });
