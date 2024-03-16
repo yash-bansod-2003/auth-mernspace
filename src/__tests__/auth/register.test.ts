@@ -287,7 +287,7 @@ describe("auth register", () => {
 
       const refreshTokenRepository = connection.getRepository(RefreshToken);
 
-      const tokens = refreshTokenRepository
+      const tokens = await refreshTokenRepository
         .createQueryBuilder("refreshToken")
         .where("refreshToken.userId = :userId", {
           userId: (response.body as Record<string, string>).id,
