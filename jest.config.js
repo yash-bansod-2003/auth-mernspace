@@ -18,6 +18,7 @@ module.exports = {
   testPathIgnorePatterns: ["<rootDir>/e2e"],
   preset: "ts-jest",
   testEnvironment: "node",
+  verbose: true,
   collectCoverage: true,
   coverageProvider: "v8",
   collectCoverageFrom: [

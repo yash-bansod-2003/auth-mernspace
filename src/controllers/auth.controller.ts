@@ -14,6 +14,13 @@ interface AuthLoginRequest extends Request {
   body: Pick<UserData, "email" | "password">;
 }
 
+export interface AuthSelfRequest extends Request {
+  auth: {
+    sub: string;
+    role: string;
+  };
+}
+
 class AuthController {
   constructor(
     private authService: AuthService,
@@ -56,9 +63,9 @@ class AuthController {
         role: user.role,
       };
 
-      const newRefreshToken = await this.tokenService.persistRefreshToken(user);
-
       const accessToken = this.tokenService.generateAccessToken(payload);
+
+      const newRefreshToken = await this.tokenService.persistRefreshToken(user);
 
       const refreshToken = this.tokenService.generateRefreshToken(
         payload,
@@ -137,11 +144,12 @@ class AuthController {
     }
   }
 
-  self(req: Request, res: Response, next: NextFunction) {
+  async self(req: AuthSelfRequest, res: Response, next: NextFunction) {
     this.logger.debug("new request to self data");
 
     try {
-      return res.json({ id: 1 });
+      const user = await this.authService.me({ id: Number(req.auth.sub) });
+      return res.json(user);
     } catch (error) {
       return next(error);
     }

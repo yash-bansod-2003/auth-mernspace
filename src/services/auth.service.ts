@@ -30,7 +30,7 @@ class AuthService {
         role: UserRoles.CUSTOMER,
       });
     } catch (err) {
-      const error = createHttpError(500, "failed to store data in database");
+      const error = createHttpError(500, String(err));
       throw error;
     }
   }
@@ -54,6 +54,17 @@ class AuthService {
       return user;
     } catch (err) {
       const error = createHttpError(500, "failed to store data in database");
+      throw error;
+    }
+  }
+
+  async me({ id }: { id: number }) {
+    try {
+      const user = await this.userRepository.findOne({ where: { id } });
+
+      return user;
+    } catch (err) {
+      const error = createHttpError(500);
       throw error;
     }
   }

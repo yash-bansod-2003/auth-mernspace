@@ -19,10 +19,6 @@ describe("auth register", () => {
     await connection.synchronize();
   });
 
-  afterEach(async () => {
-    await connection.dropDatabase();
-  });
-
   afterAll(async () => {
     await connection.destroy();
   });
@@ -39,10 +35,7 @@ describe("auth register", () => {
       await supertest(createServer())
         .post("/api/auth/register")
         .send(userData)
-        .expect(201)
-        .then((res) => {
-          expect(res.ok).toBe(true);
-        });
+        .expect(201);
     });
 
     it("should return valid JSON response", async () => {
