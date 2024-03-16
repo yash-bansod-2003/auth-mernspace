@@ -11,7 +11,8 @@ class AuthService {
   }
 
   async create({ firstName, lastName, email, password }: UserData) {
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
 
     try {
       return await this.userRepository.save({
