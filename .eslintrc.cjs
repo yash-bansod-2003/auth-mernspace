@@ -42,6 +42,7 @@ module.exports = {
     "/scripts/*",
   ],
   rules: {
+    "no-console": 'error',
     "import/no-default-export": "off",
     "@typescript-eslint/no-misused-promises": "off",
     "@typescript-eslint/unbound-method": "off",

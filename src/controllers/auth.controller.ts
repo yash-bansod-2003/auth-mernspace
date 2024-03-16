@@ -154,6 +154,16 @@ class AuthController {
       return next(error);
     }
   }
+
+  refresh(req: Request, res: Response, next: NextFunction) {
+    this.logger.debug("new request for refresh token");
+
+    try {
+      return res.json();
+    } catch (error) {
+      return next(error);
+    }
+  }
 }
 
 export { AuthController };

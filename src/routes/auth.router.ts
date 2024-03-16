@@ -8,6 +8,7 @@ import { loginValidator, registerValidator } from "@/lib/validators/auth";
 import { TokenService } from "@/services/token.service";
 import { RefreshToken } from "@/entity/refresh-token";
 import authenticate from "@/middlewares/authenticate";
+import validateRefreshToken from "@/middlewares/validateRefreshToken";
 
 const router = express.Router();
 
@@ -35,6 +36,12 @@ router.get(
   async (req: Request, res: Response, next: NextFunction) => {
     await authController.self(req as AuthSelfRequest, res, next);
   },
+);
+
+router.post(
+  "/refresh",
+  validateRefreshToken,
+  authController.refresh.bind(authController),
 );
 
 export { router as authRouter };
