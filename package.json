@@ -18,7 +18,7 @@
     "test:e2e": "jest e2e --config=e2e/jest.config.js --detectOpenHandles",
     "prepare": "husky",
     "commitlint": "commitlint --edit",
-    "typeorm": "typeorm-ts-node-commonjs"
+    "migration:generate": "typeorm-ts-node-commonjs migration:generate"
   },
   "repository": {
     "type": "git",

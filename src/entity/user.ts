@@ -1,4 +1,4 @@
-import { UserRoles } from "@/constants";
+import { UserRoles } from "../constants";
 import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
 
 @Entity()

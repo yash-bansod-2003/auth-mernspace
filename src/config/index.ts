@@ -4,7 +4,7 @@ import { config } from "dotenv";
 config({
   path: path.join(
     __dirname,
-    `../../environments/.env.${process.env.NODE_ENV}.local`,
+    `../../environments/.env.${process.env.NODE_ENV || "development"}.local`,
   ),
 });
 
