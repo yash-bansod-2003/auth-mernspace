@@ -58,14 +58,17 @@ class AuthController {
 
       const MS_IN_YEAR = 1000 * 60 * 60 * 24 * 365;
 
-      await refreshTokenRepository.save({
+      const newRefreshToken = await refreshTokenRepository.save({
         user: user,
         expires_at: new Date(Date.now() + MS_IN_YEAR),
       });
 
       const accessToken = this.tokenService.generateAccessToken(payload);
 
-      const refreshToken = this.tokenService.generateRefreshToken(payload);
+      const refreshToken = this.tokenService.generateRefreshToken(
+        payload,
+        newRefreshToken.id,
+      );
 
       res.cookie("accessToken", accessToken, {
         httpOnly: true,

@@ -25,12 +25,12 @@ class TokenService {
     return accessToken;
   }
 
-  generateRefreshToken(payload: Jwt.JwtPayload): string {
+  generateRefreshToken(payload: Jwt.JwtPayload, id: number): string {
     const refreshToken = sign(payload, CONFIG.REFRESH_TOKEN_SECRET!, {
       algorithm: "HS256",
       expiresIn: "1y",
       issuer: "auth-service",
-      jwtid: String(payload.id),
+      jwtid: String(id),
     });
 
     return refreshToken;
