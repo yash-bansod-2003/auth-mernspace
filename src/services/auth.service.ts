@@ -2,20 +2,24 @@ import { User } from "@/entity/user";
 import { Repository } from "typeorm";
 import { UserData } from "@/types";
 import createHttpError from "http-errors";
+import { UserRoles } from "@/constants";
+import bcrypt from "bcrypt";
 
 class AuthService {
   constructor(private userRepository: Repository<User>) {
     this.userRepository = userRepository;
   }
 
-  async create({ firstName, lastName, email, password, role }: UserData) {
+  async create({ firstName, lastName, email, password }: UserData) {
+    const hashedPassword = await bcrypt.hash(password, 10);
+
     try {
       return await this.userRepository.save({
         firstName,
         lastName,
         email,
-        password,
-        role,
+        password: hashedPassword,
+        role: UserRoles.CUSTOMER,
       });
     } catch (err) {
       const error = createHttpError(500, "failed to store data in database");
