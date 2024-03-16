@@ -4,7 +4,7 @@ import { AuthService } from "@/services/auth.service";
 import { AppDataSource } from "@/data-source";
 import { User } from "@/entity/user";
 import { logger } from "@/config/logger";
-import { registerValidator } from "@/lib/validators/auth";
+import { loginValidator, registerValidator } from "@/lib/validators/auth";
 import { TokenService } from "@/services/token.service";
 import { RefreshToken } from "@/entity/refresh-token";
 
@@ -20,6 +20,12 @@ router.post(
   "/register",
   registerValidator,
   authController.register.bind(authController),
+);
+
+router.post(
+  "/login",
+  loginValidator,
+  authController.login.bind(authController),
 );
 
 export { router as authRouter };

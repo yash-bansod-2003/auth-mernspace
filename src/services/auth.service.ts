@@ -34,6 +34,29 @@ class AuthService {
       throw error;
     }
   }
+
+  async login({ email, password }: Pick<UserData, "email" | "password">) {
+    const user = await this.userRepository.findOne({ where: { email } });
+
+    if (!user) {
+      const error = createHttpError(404, "user not found");
+      throw error;
+    }
+
+    try {
+      const match = await bcrypt.compare(password, user.password);
+
+      if (!match) {
+        const error = createHttpError(500, "wrong credentials");
+        throw error;
+      }
+
+      return user;
+    } catch (err) {
+      const error = createHttpError(500, "failed to store data in database");
+      throw error;
+    }
+  }
 }
 
 export { AuthService };

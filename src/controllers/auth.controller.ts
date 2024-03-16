@@ -10,6 +10,10 @@ interface AuthRegisterRequest extends Request {
   body: UserData;
 }
 
+interface AuthLoginRequest extends Request {
+  body: Pick<UserData, "email" | "password">;
+}
+
 class AuthController {
   constructor(
     private authService: AuthService,
@@ -76,6 +80,58 @@ class AuthController {
       });
 
       return res.status(201).json({ id: user.id });
+    } catch (error) {
+      return next(error);
+    }
+  }
+
+  async login(req: AuthLoginRequest, res: Response, next: NextFunction) {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { email, password } = req.body;
+
+    this.logger.debug("new request to login a user", {
+      email,
+    });
+
+    try {
+      const user = await this.authService.login({ email, password });
+
+      this.logger.info("User has been loged in", { id: user.id });
+
+      const payload: Jwt.JwtPayload = {
+        sub: String(user.id),
+        role: user.role,
+      };
+
+      const newRefreshToken = await this.tokenService.persistRefreshToken(user);
+
+      const accessToken = this.tokenService.generateAccessToken(payload);
+
+      const refreshToken = this.tokenService.generateRefreshToken(
+        payload,
+        newRefreshToken.id,
+      );
+
+      res.cookie("accessToken", accessToken, {
+        httpOnly: true,
+        domain: "localhost",
+        sameSite: "strict",
+        maxAge: 1000 * 60 * 60,
+      });
+
+      res.cookie("refreshToken", refreshToken, {
+        httpOnly: true,
+        domain: "localhost",
+        sameSite: "strict",
+        maxAge: 1000 * 60 * 60 * 24 * 365,
+      });
+
+      return res.json({ id: user.id });
     } catch (error) {
       return next(error);
     }
