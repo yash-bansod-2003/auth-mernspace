@@ -8,13 +8,14 @@ class AuthService {
     this.userRepository = userRepository;
   }
 
-  async create({ firstName, lastName, email, password }: UserData) {
+  async create({ firstName, lastName, email, password, role }: UserData) {
     try {
       return await this.userRepository.save({
         firstName,
         lastName,
         email,
         password,
+        role,
       });
     } catch (err) {
       const error = createHttpError(500, "failed to store data in database");

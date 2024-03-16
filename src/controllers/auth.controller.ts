@@ -17,12 +17,13 @@ class AuthController {
 
   async register(req: AuthRegisterRequest, res: Response, next: NextFunction) {
     try {
-      const { firstName, lastName, email, password } = req.body;
+      const { firstName, lastName, email, password, role } = req.body;
 
       this.logger.debug("new request to create a user", {
         firstName,
         lastName,
         email,
+        role,
       });
 
       const user = await this.authService.create({
@@ -30,6 +31,7 @@ class AuthController {
         lastName,
         email,
         password,
+        role,
       });
 
       this.logger.info("User has been registered", { id: user.id });

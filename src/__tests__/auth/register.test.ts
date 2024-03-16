@@ -2,8 +2,8 @@ import supertest from "supertest";
 import { createServer } from "@/server";
 import { DataSource } from "typeorm";
 import { AppDataSource } from "@/data-source";
-import { truncateTables } from "@/lib/truncate-tables";
 import { User } from "@/entity/user";
+import { UserRoles } from "@/constants";
 import { type UserData } from "@/types";
 
 describe("auth register", () => {
@@ -14,7 +14,8 @@ describe("auth register", () => {
   });
 
   beforeEach(async () => {
-    await truncateTables(connection);
+    await connection.dropDatabase();
+    await connection.synchronize();
   });
 
   afterAll(async () => {
@@ -28,6 +29,7 @@ describe("auth register", () => {
         lastName: "bansod",
         email: "test@example.com",
         password: "secret",
+        role: UserRoles.CUSTOMER,
       };
 
       await supertest(createServer())
@@ -45,6 +47,7 @@ describe("auth register", () => {
         lastName: "bansod",
         email: "test@example.com",
         password: "secret",
+        role: UserRoles.CUSTOMER,
       };
 
       await supertest(createServer())
@@ -63,6 +66,7 @@ describe("auth register", () => {
         lastName: "bansod",
         email: "test@example.com",
         password: "secret",
+        role: UserRoles.CUSTOMER,
       };
 
       await supertest(createServer())
@@ -86,6 +90,7 @@ describe("auth register", () => {
         lastName: "bansod",
         email: "test@example.com",
         password: "secret",
+        role: UserRoles.CUSTOMER,
       };
 
       await supertest(createServer())
@@ -96,6 +101,27 @@ describe("auth register", () => {
         .then((res) => {
           expect((res.body as unknown as { id: string }).id).toBeDefined();
         });
+    });
+
+    it("should assign default customer role", async () => {
+      const userData: UserData = {
+        firstName: "yash",
+        lastName: "bansod",
+        email: "test@example.com",
+        password: "secret",
+        role: UserRoles.CUSTOMER,
+      };
+
+      await supertest(createServer())
+        .post("/api/auth/register")
+        .send(userData)
+        .expect(201);
+
+      const userRepository = connection.getRepository(User);
+      const users = await userRepository.find();
+
+      expect(users[0]).toHaveProperty("role");
+      expect(users[0].role).toBe(UserRoles.CUSTOMER);
     });
   });
 });
