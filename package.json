@@ -19,7 +19,8 @@
     "prepare": "husky",
     "commitlint": "commitlint --edit",
     "migration:generate": "typeorm-ts-node-commonjs migration:generate",
-    "migration:run": "typeorm-ts-node-commonjs migration:run"
+    "migration:run": "typeorm-ts-node-commonjs migration:run",
+    "migration:revert": "typeorm-ts-node-commonjs migration:revert"
   },
   "repository": {
     "type": "git",
