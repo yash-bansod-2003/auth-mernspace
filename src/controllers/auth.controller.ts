@@ -6,6 +6,7 @@ import { validationResult } from "express-validator";
 import Jwt, { sign } from "jsonwebtoken";
 import fs from "node:fs";
 import path from "node:path";
+import { CONFIG } from "@/config";
 
 interface AuthRegisterRequest extends Request {
   body: UserData;
@@ -61,7 +62,7 @@ class AuthController {
         issuer: "auth-service",
       });
 
-      const refreshToken = sign(payload, "secret", {
+      const refreshToken = sign(payload, CONFIG.REFRESH_TOKEN_SECRET!, {
         algorithm: "HS256",
         expiresIn: "1y",
         issuer: "auth-service",
