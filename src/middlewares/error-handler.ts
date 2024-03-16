@@ -1,6 +1,7 @@
 import type { Request, Response, NextFunction } from "express";
 import { HttpError } from "http-errors";
 import { logger } from "@/config/logger";
+import { UnauthorizedError } from "express-jwt";
 
 const errorHandler = (
   err: HttpError | Error,
@@ -14,6 +15,10 @@ const errorHandler = (
 
   if (err instanceof HttpError) {
     statusCode = err.statusCode;
+  }
+
+  if (err instanceof UnauthorizedError) {
+    statusCode = err.status;
   }
 
   res.status(statusCode).json({

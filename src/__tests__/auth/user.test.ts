@@ -97,5 +97,23 @@ describe("auth self", () => {
           ).not.toBeDefined();
         });
     });
+
+    it("should return status 401 if token does not exists", async () => {
+      // Register the user
+      const userData = {
+        firstName: "yash",
+        lastName: "bansod",
+        email: "test@example.com",
+        password: "secret",
+      };
+
+      const userRepository = connection.getRepository(User);
+      await userRepository.save({
+        ...userData,
+        role: UserRoles.CUSTOMER,
+      });
+
+      await supertest(createServer()).get("/api/auth/self").expect(401);
+    });
   });
 });
