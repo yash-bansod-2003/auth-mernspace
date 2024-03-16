@@ -2,7 +2,7 @@ import { AuthService } from "@/services/auth.service";
 import { Request, Response, NextFunction } from "express";
 import { UserData } from "@/types";
 import { Logger } from "winston";
-import createHttpError from "http-errors";
+import { validationResult } from "express-validator";
 
 interface AuthRegisterRequest extends Request {
   body: UserData;
@@ -17,11 +17,13 @@ class AuthController {
   }
 
   async register(req: AuthRegisterRequest, res: Response, next: NextFunction) {
-    const { firstName, lastName, email, password, role } = req.body;
+    const errors = validationResult(req);
 
-    if (!email) {
-      return next(createHttpError(400, "Email is required"));
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
     }
+
+    const { firstName, lastName, email, password, role } = req.body;
 
     try {
       this.logger.debug("new request to create a user", {
