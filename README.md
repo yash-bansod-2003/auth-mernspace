@@ -1,6 +1,6 @@
-# Node Template for Easy Development
+# Mernspace Auth Service
 
-Simplify your Node.js projects with this template. It comes with Jest, TypeScript, Prettier, and ESLint for smoother development. Boost your productivity and maintain code quality effortlessly with this repository.
+authentication service for mernspace food delivering application
 
 > **Credits :**
 > All developers who developed amazing libraries
