@@ -1,27 +1,27 @@
-FROM node:20 as builder
+FROM node:20-alpine as builder
 
 WORKDIR /build
 
 COPY package*.json ./
 
-COPY . .
+RUN npm ci
 
-RUN npm install
+COPY . .
 
 RUN npm run build
 
-FROM node:20 as runner
+FROM node:20-alpine as runner
+
+ENV NODE_ENV=production
 
 WORKDIR /app
 
 COPY --from=builder /build/package*.json ./
 
-RUN npm install --only=production
+RUN npm ci --ignore-scripts --omit=dev
 
 COPY --from=builder /build/dist ./dist/
 
 EXPOSE 5001
 
 CMD [ "npm" , "start" ]
-
-
