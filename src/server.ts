@@ -15,7 +15,7 @@ export const createServer = (): Express => {
     .use(urlencoded({ extended: true }))
     .use(json())
     .use(cookieParser())
-    .use(cors())
+    .use(cors({ origin: "*" }))
     .get("/status", (_, res) => {
       return res.json({ ok: true });
     })
