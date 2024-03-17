@@ -31,7 +31,7 @@ describe("tenent create", () => {
 
   describe("post /api/tenant", () => {
     it("should return status 201", async () => {
-      const accessToken = jwks.token({ sub: "1", role: UserRoles.CUSTOMER });
+      const accessToken = jwks.token({ sub: "1", role: UserRoles.ADMIN });
 
       const tenantData = {
         name: "Tenant Name",
@@ -49,7 +49,7 @@ describe("tenent create", () => {
     });
 
     it("should save tenant in database", async () => {
-      const accessToken = jwks.token({ sub: "1", role: UserRoles.CUSTOMER });
+      const accessToken = jwks.token({ sub: "1", role: UserRoles.ADMIN });
 
       const tenantData = {
         name: "Tenant Name",
