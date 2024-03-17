@@ -3,7 +3,7 @@ import { Repository } from "typeorm";
 import { UserData } from "@/types";
 import createHttpError from "http-errors";
 import { UserRoles } from "@/constants";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 
 class AuthService {
   constructor(private userRepository: Repository<User>) {
