@@ -86,5 +86,25 @@ describe("tenent create", () => {
 
       expect(tenants).toHaveLength(0);
     });
+
+    it("should return status 403 (Forbidden) if user is not admin", async () => {
+      const accessToken = jwks.token({ sub: "1", role: UserRoles.CUSTOMER });
+
+      const tenantData = {
+        name: "Tenant Name",
+        address: "Tenant Address",
+      };
+
+      await supertest(createServer())
+        .post("/api/tenant")
+        .set("Cookie", [`accessToken=${accessToken}`])
+        .send(tenantData)
+        .expect(403);
+
+      const tenantRepository = connection.getRepository(Tenant);
+      const tenants = await tenantRepository.find();
+
+      expect(tenants).toHaveLength(0);
+    });
   });
 });

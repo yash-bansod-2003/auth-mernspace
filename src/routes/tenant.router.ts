@@ -7,6 +7,8 @@ import { AuthenticatedRequest } from "@/types";
 import { tenentCreateValidator } from "@/lib/validators/tenant";
 import { logger } from "@/config/logger";
 import authenticate from "@/middlewares/authenticate";
+import { canAccess } from "@/middlewares/can-access";
+import { UserRoles } from "@/constants";
 
 const router = express.Router();
 const tenantRepository = AppDataSource.getRepository(Tenant);
@@ -17,6 +19,7 @@ router.post(
   "/tenant",
   tenentCreateValidator,
   authenticate,
+  canAccess([UserRoles.ADMIN]),
   async (req: Request, res: Response, next: NextFunction) => {
     await tenantController.create(req as AuthenticatedRequest, res, next);
   },
