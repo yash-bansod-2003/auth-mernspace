@@ -1,11 +1,9 @@
-import { CONFIG } from "@/config";
-import { RefreshToken } from "@/entity/refresh-token";
-import { User } from "@/entity/user";
 import createHttpError from "http-errors";
 import Jwt, { sign } from "jsonwebtoken";
-import fs from "node:fs";
-import path from "node:path";
 import { Repository } from "typeorm";
+import { RefreshToken } from "@/entity/refresh-token";
+import { User } from "@/entity/user";
+import { CONFIG } from "@/config";
 
 class TokenService {
   constructor(private refreshTokenRepository: Repository<RefreshToken>) {
@@ -13,11 +11,14 @@ class TokenService {
   }
 
   generateAccessToken(payload: Jwt.JwtPayload): string {
-    let privateKey: Buffer;
+    let privateKey: string;
     try {
-      privateKey = fs.readFileSync(
-        path.join(__dirname, "../../certs/private.pem"),
-      );
+      if (!CONFIG.PRIVATE_KEY) {
+        const err = createHttpError(500, "Private key is null");
+        throw err;
+      }
+
+      privateKey = CONFIG.PRIVATE_KEY;
     } catch (error) {
       const err = createHttpError(500, "Private key not to be null");
       throw err;
