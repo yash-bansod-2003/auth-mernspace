@@ -6,6 +6,7 @@ import { TenantService } from "@/services/tenant.service";
 import { AuthenticatedRequest } from "@/types";
 import { tenentCreateValidator } from "@/lib/validators/tenant";
 import { logger } from "@/config/logger";
+import authenticate from "@/middlewares/authenticate";
 
 const router = express.Router();
 const tenantRepository = AppDataSource.getRepository(Tenant);
@@ -15,6 +16,7 @@ const tenantController = new TenantController(tenantService, logger);
 router.post(
   "/tenant",
   tenentCreateValidator,
+  authenticate,
   async (req: Request, res: Response, next: NextFunction) => {
     await tenantController.create(req as AuthenticatedRequest, res, next);
   },
