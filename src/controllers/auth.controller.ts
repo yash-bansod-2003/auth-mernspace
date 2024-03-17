@@ -1,6 +1,6 @@
 import { AuthService } from "@/services/auth.service";
 import { Request, Response, NextFunction } from "express";
-import { UserData } from "@/types";
+import { UserData, AuthenticatedRequest } from "@/types";
 import { Logger } from "winston";
 import { validationResult } from "express-validator";
 import Jwt from "jsonwebtoken";
@@ -13,14 +13,6 @@ interface AuthRegisterRequest extends Request {
 
 interface AuthLoginRequest extends Request {
   body: Pick<UserData, "email" | "password">;
-}
-
-export interface AuthSelfRequest extends Request {
-  auth: {
-    sub: string;
-    role: string;
-    jti: string;
-  };
 }
 
 class AuthController {
@@ -146,7 +138,7 @@ class AuthController {
     }
   }
 
-  async self(req: AuthSelfRequest, res: Response, next: NextFunction) {
+  async self(req: AuthenticatedRequest, res: Response, next: NextFunction) {
     this.logger.debug("new request to self data");
 
     try {
@@ -157,7 +149,7 @@ class AuthController {
     }
   }
 
-  async refresh(req: AuthSelfRequest, res: Response, next: NextFunction) {
+  async refresh(req: AuthenticatedRequest, res: Response, next: NextFunction) {
     this.logger.debug("new request for refresh token");
 
     try {
@@ -203,7 +195,7 @@ class AuthController {
     }
   }
 
-  async logout(req: AuthSelfRequest, res: Response, next: NextFunction) {
+  async logout(req: AuthenticatedRequest, res: Response, next: NextFunction) {
     this.logger.debug("new request to logout");
 
     try {

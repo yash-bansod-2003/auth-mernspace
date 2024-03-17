@@ -1,8 +1,9 @@
 import express, { NextFunction, Request, Response } from "express";
-import { AuthController, AuthSelfRequest } from "@/controllers/auth.controller";
+import { AuthController } from "@/controllers/auth.controller";
 import { AuthService } from "@/services/auth.service";
 import { AppDataSource } from "@/data-source";
 import { User } from "@/entity/user";
+import { AuthenticatedRequest } from "@/types";
 import { logger } from "@/config/logger";
 import { loginValidator, registerValidator } from "@/lib/validators/auth";
 import { TokenService } from "@/services/token.service";
@@ -35,7 +36,7 @@ router.get(
   "/self",
   authenticate,
   async (req: Request, res: Response, next: NextFunction) => {
-    await authController.self(req as AuthSelfRequest, res, next);
+    await authController.self(req as AuthenticatedRequest, res, next);
   },
 );
 
@@ -43,7 +44,7 @@ router.post(
   "/refresh",
   validateRefreshToken,
   async (req: Request, res: Response, next: NextFunction) => {
-    await authController.refresh(req as AuthSelfRequest, res, next);
+    await authController.refresh(req as AuthenticatedRequest, res, next);
   },
 );
 
@@ -52,7 +53,7 @@ router.post(
   authenticate,
   parseRefreshToken,
   async (req: Request, res: Response, next: NextFunction) => {
-    await authController.logout(req as AuthSelfRequest, res, next);
+    await authController.logout(req as AuthenticatedRequest, res, next);
   },
 );
 

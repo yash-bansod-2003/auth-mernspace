@@ -4,6 +4,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import { errorHandler } from "@/middlewares/error-handler";
 import { authRouter } from "@/routes/auth.router";
+import { tenantRouter } from "@/routes/tenant.router";
 
 export const createServer = (): Express => {
   const app = express();
@@ -22,6 +23,7 @@ export const createServer = (): Express => {
       return res.json({ message: `hello ${req.params.name}` });
     })
     .use("/api/auth", authRouter)
+    .use("/api", tenantRouter)
     .use(errorHandler);
 
   return app;
