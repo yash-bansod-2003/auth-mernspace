@@ -4,9 +4,9 @@
   "description": "a best practice templete for follow industries standards and clean code",
   "main": "index.js",
   "scripts": {
-    "start": "node dist/src/index.js",
+    "start": "cross-env NODE_ENV=production node dist/src/index.js",
     "dev": "cross-env NODE_ENV=development nodemon",
-    "build": "cross-env NODE_ENV=production tsc && tsc-alias",
+    "build": "tsc && tsc-alias",
     "typecheck": "tsc --noEmit",
     "format:check": "npx prettier . --check",
     "format:fix": "npx prettier . --write",
