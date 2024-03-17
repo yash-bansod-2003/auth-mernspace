@@ -8,6 +8,11 @@ export interface UserData {
   role?: string;
 }
 
+interface TenantData {
+  name: string;
+  address: string;
+}
+
 export interface AuthenticatedRequest extends Request {
   auth: {
     sub: string;

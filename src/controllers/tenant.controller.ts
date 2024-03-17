@@ -1,6 +1,11 @@
 import { TenantService } from "@/services/tenant.service";
-import { AuthenticatedRequest } from "@/types";
+import { AuthenticatedRequest, TenantData } from "@/types";
 import { NextFunction, Response } from "express";
+import { validationResult } from "express-validator";
+
+interface TenantCreateRequest extends AuthenticatedRequest {
+  body: TenantData;
+}
 
 class TenantController {
   private tenantService: TenantService;
@@ -9,9 +14,21 @@ class TenantController {
     this.tenantService = tenantService;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  create(req: AuthenticatedRequest, res: Response, next: NextFunction) {
-    return res.status(201).json();
+  async create(req: TenantCreateRequest, res: Response, next: NextFunction) {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { name, address } = req.body;
+
+    try {
+      const tenant = await this.tenantService.create({ name, address });
+      return res.status(201).json(tenant);
+    } catch (error) {
+      return next(error);
+    }
   }
 }
 

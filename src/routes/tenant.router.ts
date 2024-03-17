@@ -10,8 +10,11 @@ const tenantRepository = AppDataSource.getRepository(Tenant);
 const tenantService = new TenantService(tenantRepository);
 const tenantController = new TenantController(tenantService);
 
-router.post("/tenant", (req: Request, res: Response, next: NextFunction) => {
-  tenantController.create(req as AuthenticatedRequest, res, next);
-});
+router.post(
+  "/tenant",
+  async (req: Request, res: Response, next: NextFunction) => {
+    await tenantController.create(req as AuthenticatedRequest, res, next);
+  },
+);
 
 export { router as tenantRouter };

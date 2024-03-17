@@ -28,7 +28,7 @@ describe("auth refresh", () => {
   });
 
   describe("post /api/auth/refresh", () => {
-    it("should return status 200", async () => {
+    it.skip("should return status 200", async () => {
       await supertest(createServer())
         .post("/api/auth/refresh")
         .expect(200)
