@@ -13,9 +13,9 @@
       "@/*": ["./src/*"],
       "@e2e/*": ["./e2e/*"]
     },
-    "declaration": true,
+    "declaration": false,
     "sourceMap": true,
-    "outDir": "./dist",
+    "outDir": "./dist/src",
     "removeComments": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
@@ -28,9 +28,8 @@
     "strictBindCallApply": true,
     "noImplicitThis": true,
     "alwaysStrict": true,
-    "resolveJsonModule": true,
-    "typeRoots": ["./node_modules/@types", "./src/types"]
+    "resolveJsonModule": true
   },
-  "exclude": ["node_modules"],
-  "include": ["src/**/*.ts", "src/**/*.d.ts"]
+  "include": ["src/**/*.ts", "src/**/*.d.ts"],
+  "exclude": ["node_modules"]
 }

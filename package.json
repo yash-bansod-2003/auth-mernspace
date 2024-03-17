@@ -4,7 +4,7 @@
   "description": "a best practice templete for follow industries standards and clean code",
   "main": "index.js",
   "scripts": {
-    "start": "cross-env NODE_ENV=production ts-node src/index.ts",
+    "start": "cross-env NODE_ENV=production ts-node dist/src/index.js",
     "dev": "cross-env NODE_ENV=development nodemon",
     "build": "tsc && tsc-alias",
     "typecheck": "tsc --noEmit",
@@ -56,6 +56,7 @@
     "@typescript-eslint/parser": "^7.2.0",
     "@vercel/style-guide": "^6.0.0",
     "axios": "^1.6.8",
+    "copyfiles": "^2.4.1",
     "cross-env": "^7.0.3",
     "eslint": "^8.57.0",
     "eslint-config-airbnb-typescript": "^18.0.0",
