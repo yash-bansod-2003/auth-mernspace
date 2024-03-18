@@ -19,6 +19,16 @@ class TenantService {
       throw err;
     }
   }
+
+  async findAll() {
+    try {
+      const tenents = await this.tenantRepository.find();
+      return tenents;
+    } catch (error) {
+      const err = createHttpError(500, String(error));
+      throw err;
+    }
+  }
 }
 
 export { TenantService };

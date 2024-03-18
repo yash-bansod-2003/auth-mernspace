@@ -25,4 +25,13 @@ router.post(
   },
 );
 
+router.get(
+  "/tenant",
+  authenticate,
+  canAccess([UserRoles.ADMIN]),
+  async (req: Request, res: Response, next: NextFunction) => {
+    await tenantController.indexAll(req as AuthenticatedRequest, res, next);
+  },
+);
+
 export { router as tenantRouter };
