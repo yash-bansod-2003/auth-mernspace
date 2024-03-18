@@ -4,7 +4,7 @@
   "description": "a best practice templete for follow industries standards and clean code",
   "main": "index.js",
   "scripts": {
-    "start": "cross-env NODE_ENV=production ts-node dist/index.js",
+    "start": "cross-env NODE_ENV=production node dist/index.js",
     "dev": "cross-env NODE_ENV=development nodemon",
     "build": "tsup",
     "typecheck": "tsc --noEmit",
@@ -69,8 +69,10 @@
     "supertest": "^6.3.4",
     "ts-jest": "^29.1.2",
     "ts-node": "10.9.2",
+    "tsc-alias": "^1.8.8",
     "tsc-alias-sync": "^1.8.6",
     "tsconfig-paths": "^4.2.0",
+    "tsup": "^8.0.2",
     "typescript": "5.4.2"
   },
   "dependencies": {
@@ -89,8 +91,6 @@
     "pg": "^8.11.3",
     "reflect-metadata": "^0.2.1",
     "rsa-pem-to-jwk": "^1.1.3",
-    "tsc-alias": "^1.8.8",
-    "tsup": "^8.0.2",
     "typeorm": "0.3.20",
     "winston": "^3.12.0"
   }
