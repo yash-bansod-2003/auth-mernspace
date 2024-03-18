@@ -172,7 +172,7 @@ describe("auth register", () => {
       await supertest(createServer())
         .post("/api/auth/register")
         .send(userData)
-        .expect(400);
+        .expect(422);
 
       const userRepository = connection.getRepository(User);
       const users = await userRepository.find();
@@ -190,7 +190,7 @@ describe("auth register", () => {
       await supertest(createServer())
         .post("/api/auth/register")
         .send(userData)
-        .expect(400);
+        .expect(422);
 
       const userRepository = connection.getRepository(User);
       const users = await userRepository.find();
@@ -198,12 +198,40 @@ describe("auth register", () => {
       expect(users).toHaveLength(0);
     });
 
-    it.todo(
-      "should return 422 (Unprocessable Entity) if firstName filed is missing",
-    );
-    it.todo(
-      "should return 422 (Unprocessable Entity) if lastName filed is missing",
-    );
+    it("should return 422 (Unprocessable Entity) if firstName filed is missing", async () => {
+      const userData: Omit<UserData, "firstName"> = {
+        email: "test@example.com",
+        lastName: "bansod",
+        password: "secret",
+      };
+
+      await supertest(createServer())
+        .post("/api/auth/register")
+        .send(userData)
+        .expect(422);
+
+      const userRepository = connection.getRepository(User);
+      const users = await userRepository.find();
+
+      expect(users).toHaveLength(0);
+    });
+    it("should return 422 (Unprocessable Entity) if lastName filed is missing", async () => {
+      const userData: Omit<UserData, "lastName"> = {
+        firstName: "yash",
+        email: "test@example.com",
+        password: "secret",
+      };
+
+      await supertest(createServer())
+        .post("/api/auth/register")
+        .send(userData)
+        .expect(422);
+
+      const userRepository = connection.getRepository(User);
+      const users = await userRepository.find();
+
+      expect(users).toHaveLength(0);
+    });
 
     it("should trim email field", async () => {
       const userData: UserData = {
