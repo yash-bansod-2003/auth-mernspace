@@ -40,6 +40,7 @@ module.exports = {
     ".eslintrc.*",
     "jest.config.*",
     "/scripts/*",
+    "tsup.config.*",
   ],
   rules: {
     "no-console": "error",
