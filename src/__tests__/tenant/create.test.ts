@@ -106,5 +106,43 @@ describe("tenent create", () => {
 
       expect(tenants).toHaveLength(0);
     });
+
+    it("should return 422 (Unprocessable Entity) if name filed is missing", async () => {
+      const accessToken = jwks.token({ sub: "1", role: UserRoles.ADMIN });
+
+      const tenantData = {
+        address: "Tenant Address",
+      };
+
+      await supertest(createServer())
+        .post("/api/tenant")
+        .set("Cookie", [`accessToken=${accessToken}`])
+        .send(tenantData)
+        .expect(422);
+
+      const tenantRepository = connection.getRepository(Tenant);
+      const tenants = await tenantRepository.find();
+
+      expect(tenants).toHaveLength(0);
+    });
+
+    it("should return 422 (Unprocessable Entity) if address filed is missing", async () => {
+      const accessToken = jwks.token({ sub: "1", role: UserRoles.ADMIN });
+
+      const tenantData = {
+        name: "Tenant Name",
+      };
+
+      await supertest(createServer())
+        .post("/api/tenant")
+        .set("Cookie", [`accessToken=${accessToken}`])
+        .send(tenantData)
+        .expect(422);
+
+      const tenantRepository = connection.getRepository(Tenant);
+      const tenants = await tenantRepository.find();
+
+      expect(tenants).toHaveLength(0);
+    });
   });
 });

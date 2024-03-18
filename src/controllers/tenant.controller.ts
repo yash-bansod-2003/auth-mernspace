@@ -23,7 +23,7 @@ class TenantController {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+      return res.status(422).json({ errors: errors.array() });
     }
 
     const { name, address } = req.body;
@@ -33,6 +33,24 @@ class TenantController {
       const tenant = await this.tenantService.create({ name, address });
       this.logger.info("created new tenant..!");
       return res.status(201).json(tenant);
+    } catch (error) {
+      return next(error);
+    }
+  }
+
+  async indexAll(req: AuthenticatedRequest, res: Response, next: NextFunction) {
+    try {
+      const tenants = await this.tenantService.findAll();
+      return res.json(tenants);
+    } catch (error) {
+      return next(error);
+    }
+  }
+
+  async indexOne(req: AuthenticatedRequest, res: Response, next: NextFunction) {
+    try {
+      const tenant = await this.tenantService.findOne(Number(req.params.id));
+      return res.json(tenant);
     } catch (error) {
       return next(error);
     }
