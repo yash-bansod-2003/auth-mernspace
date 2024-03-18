@@ -38,11 +38,19 @@ class TenantController {
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async indexAll(req: AuthenticatedRequest, res: Response, next: NextFunction) {
     try {
       const tenants = await this.tenantService.findAll();
       return res.json(tenants);
+    } catch (error) {
+      return next(error);
+    }
+  }
+
+  async indexOne(req: AuthenticatedRequest, res: Response, next: NextFunction) {
+    try {
+      const tenant = await this.tenantService.findOne(Number(req.params.id));
+      return res.json(tenant);
     } catch (error) {
       return next(error);
     }

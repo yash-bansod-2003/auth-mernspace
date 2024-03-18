@@ -29,6 +29,16 @@ class TenantService {
       throw err;
     }
   }
+
+  async findOne(id: number) {
+    try {
+      const tenent = await this.tenantRepository.find({ where: { id } });
+      return tenent;
+    } catch (error) {
+      const err = createHttpError(500, String(error));
+      throw err;
+    }
+  }
 }
 
 export { TenantService };

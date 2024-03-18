@@ -34,4 +34,13 @@ router.get(
   },
 );
 
+router.get(
+  "/tenant/:id",
+  authenticate,
+  canAccess([UserRoles.ADMIN]),
+  async (req: Request, res: Response, next: NextFunction) => {
+    await tenantController.indexOne(req as AuthenticatedRequest, res, next);
+  },
+);
+
 export { router as tenantRouter };
