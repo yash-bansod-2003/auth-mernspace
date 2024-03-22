@@ -15,7 +15,7 @@ export const createServer = (): Express => {
     .use(urlencoded({ extended: true }))
     .use(json())
     .use(cookieParser())
-    .use(cors({ origin: "*" }))
+    .use(cors({ origin: ["http://localhost:5173"], credentials: true }))
     .get("/status", (_, res) => {
       return res.json({ ok: true });
     })
