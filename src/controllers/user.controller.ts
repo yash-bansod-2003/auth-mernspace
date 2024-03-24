@@ -106,6 +106,49 @@ class UserController {
       return next(error);
     }
   }
+
+  async indexOne(
+    req: UserRequestWithParama,
+    res: Response,
+    next: NextFunction,
+  ) {
+    const userId = req.params.id;
+
+    if (isNaN(Number(userId))) {
+      next(createHttpError(400, "Invalid url param."));
+      return;
+    }
+
+    this.logger.debug("new request to get a data of a single user");
+
+    try {
+      const user = await this.userService.me({ id: Number(userId) });
+
+      this.logger.info("User has been fetched", user);
+
+      return res.json(user);
+    } catch (error) {
+      return next(error);
+    }
+  }
+
+  async indexAll(
+    req: UserRequestWithParama,
+    res: Response,
+    next: NextFunction,
+  ) {
+    this.logger.debug("new request to get all users");
+
+    try {
+      const users = await this.userService.getAll();
+
+      this.logger.info("all users are fetched");
+
+      return res.json(users);
+    } catch (error) {
+      return next(error);
+    }
+  }
 }
 
 export { UserController };

@@ -69,6 +69,16 @@ class AuthService {
     }
   }
 
+  async getAll() {
+    try {
+      const users = await this.userRepository.find();
+      return users;
+    } catch (err) {
+      const error = createHttpError(500);
+      throw error;
+    }
+  }
+
   async update(id: number, data: UserData) {
     try {
       const user = await this.userRepository.update({ id }, data);

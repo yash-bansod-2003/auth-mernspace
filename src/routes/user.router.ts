@@ -45,4 +45,22 @@ router.delete(
   },
 );
 
+router.get(
+  "/user/:id",
+  authenticate,
+  canAccess([UserRoles.ADMIN]),
+  async (req: Request, res: Response, next: NextFunction) => {
+    await userController.indexOne(req as UserRequestWithParama, res, next);
+  },
+);
+
+router.get(
+  "/user",
+  authenticate,
+  canAccess([UserRoles.ADMIN]),
+  async (req: Request, res: Response, next: NextFunction) => {
+    await userController.indexAll(req as UserRequestWithParama, res, next);
+  },
+);
+
 export { router as userRouter };
