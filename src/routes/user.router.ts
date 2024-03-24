@@ -8,7 +8,7 @@ import { canAccess } from "@/middlewares/can-access";
 import { UserRoles } from "@/constants";
 import { userCreateValidator } from "@/lib/validators/user";
 import { logger } from "@/config/logger";
-import { UserCreateRequest } from "@/types";
+import { UserCreateRequest, UserRequestWithParama } from "@/types";
 
 const router = express.Router();
 
@@ -23,6 +23,43 @@ router.post(
   canAccess([UserRoles.ADMIN]),
   async (req: Request, res: Response, next: NextFunction) => {
     await userController.create(req as UserCreateRequest, res, next);
+  },
+);
+
+router.patch(
+  "/user/:id",
+  userCreateValidator,
+  authenticate,
+  canAccess([UserRoles.ADMIN]),
+  async (req: Request, res: Response, next: NextFunction) => {
+    await userController.update(req as UserRequestWithParama, res, next);
+  },
+);
+
+router.delete(
+  "/user/:id",
+  authenticate,
+  canAccess([UserRoles.ADMIN]),
+  async (req: Request, res: Response, next: NextFunction) => {
+    await userController.destroy(req as UserRequestWithParama, res, next);
+  },
+);
+
+router.get(
+  "/user/:id",
+  authenticate,
+  canAccess([UserRoles.ADMIN]),
+  async (req: Request, res: Response, next: NextFunction) => {
+    await userController.indexOne(req as UserRequestWithParama, res, next);
+  },
+);
+
+router.get(
+  "/user",
+  authenticate,
+  canAccess([UserRoles.ADMIN]),
+  async (req: Request, res: Response, next: NextFunction) => {
+    await userController.indexAll(req as UserRequestWithParama, res, next);
   },
 );
 

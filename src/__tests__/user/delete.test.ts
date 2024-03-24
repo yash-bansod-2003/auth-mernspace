@@ -3,10 +3,11 @@ import { createServer } from "@/server";
 import supertest from "supertest";
 import { DataSource } from "typeorm";
 import createJWKSMock from "mock-jwks";
-import { Tenant } from "@/entity/tenant";
+import { User } from "@/entity/user";
 import { UserRoles } from "@/constants";
+import { UserData } from "@/types";
 
-describe("tenent delete", () => {
+describe("user create", () => {
   let connection: DataSource;
   let jwks: ReturnType<typeof createJWKSMock>;
 
@@ -29,20 +30,24 @@ describe("tenent delete", () => {
     await connection.destroy();
   });
 
-  describe("delete /api/tenant/:id", () => {
-    const tenantData = {
-      name: "Tenant Name",
-      address: "Tenant Address",
+  describe("delete /api/user/1", () => {
+    const userData: UserData = {
+      firstName: "yash",
+      lastName: "bansod",
+      email: "test@example.com",
+      password: "secret",
+      role: UserRoles.MANAGER,
+      tenantId: 1,
     };
 
     it("should return status 200", async () => {
       const accessToken = jwks.token({ sub: "1", role: UserRoles.ADMIN });
 
-      const tenantRepository = connection.getRepository(Tenant);
-      await tenantRepository.save(tenantData);
+      const userRepository = connection.getRepository(User);
+      await userRepository.save(userData);
 
       await supertest(createServer())
-        .delete("/api/tenant/1")
+        .delete("/api/user/1")
         .set("Cookie", [`accessToken=${accessToken}`])
         .expect(200)
         .then((res) => {
@@ -50,47 +55,40 @@ describe("tenent delete", () => {
         });
     });
 
-    it("should delete tenant in database", async () => {
+    it("should delete user in database", async () => {
       const accessToken = jwks.token({ sub: "1", role: UserRoles.ADMIN });
 
-      const tenantRepository = connection.getRepository(Tenant);
-      await tenantRepository.save(tenantData);
+      const userRepository = connection.getRepository(User);
+      await userRepository.save(userData);
 
       await supertest(createServer())
-        .delete("/api/tenant/1")
+        .delete("/api/user/1")
         .set("Cookie", [`accessToken=${accessToken}`])
         .expect(200);
 
-      const tenants = await tenantRepository.find();
+      const users = await userRepository.find();
 
-      expect(tenants).toHaveLength(0);
-    });
-
-    it("should return status 401 (Unauthorized) if user is not authenticated", async () => {
-      const tenantRepository = connection.getRepository(Tenant);
-      await tenantRepository.save(tenantData);
-
-      await supertest(createServer()).delete("/api/tenant/1").expect(401);
-
-      const tenants = await tenantRepository.find();
-
-      expect(tenants).toHaveLength(1);
+      expect(users).toHaveLength(0);
     });
 
     it("should return status 403 (Forbidden) if user is not admin", async () => {
       const accessToken = jwks.token({ sub: "1", role: UserRoles.CUSTOMER });
 
-      const tenantRepository = connection.getRepository(Tenant);
-      await tenantRepository.save(tenantData);
+      const userRepository = connection.getRepository(User);
+      await userRepository.save(userData);
 
       await supertest(createServer())
-        .delete("/api/tenant/1")
+        .delete("/api/user/1")
         .set("Cookie", [`accessToken=${accessToken}`])
         .expect(403);
 
-      const tenants = await tenantRepository.find();
+      const users = await userRepository.find();
 
-      expect(tenants).toHaveLength(1);
+      expect(users).toHaveLength(1);
+    });
+
+    it("should return status 401 if token does not exists", async () => {
+      await supertest(createServer()).delete("/api/user/1").expect(401);
     });
   });
 });
