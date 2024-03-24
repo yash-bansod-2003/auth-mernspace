@@ -77,7 +77,7 @@ describe("tenent delete", () => {
       expect(tenants).toHaveLength(1);
     });
 
-    it.skip("should return status 403 (Forbidden) if user is not admin", async () => {
+    it("should return status 403 (Forbidden) if user is not admin", async () => {
       const accessToken = jwks.token({ sub: "1", role: UserRoles.CUSTOMER });
 
       const tenantRepository = connection.getRepository(Tenant);
@@ -91,8 +91,6 @@ describe("tenent delete", () => {
       const tenants = await tenantRepository.find();
 
       expect(tenants).toHaveLength(1);
-      expect(tenants[0].name).toBe(tenantData.name);
-      expect(tenants[0].address).toBe(tenantData.address);
     });
   });
 });

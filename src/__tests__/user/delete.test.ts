@@ -7,7 +7,7 @@ import { User } from "@/entity/user";
 import { UserRoles } from "@/constants";
 import { UserData } from "@/types";
 
-describe("user update", () => {
+describe("user create", () => {
   let connection: DataSource;
   let jwks: ReturnType<typeof createJWKSMock>;
 
@@ -30,22 +30,13 @@ describe("user update", () => {
     await connection.destroy();
   });
 
-  describe("patch /api/user/1", () => {
+  describe("delete /api/user/1", () => {
     const userData: UserData = {
       firstName: "yash",
       lastName: "bansod",
       email: "test@example.com",
       password: "secret",
       role: UserRoles.MANAGER,
-      tenantId: 1,
-    };
-
-    const newUserData: UserData = {
-      firstName: "New yash",
-      lastName: "New bansod",
-      email: "New test@example.com",
-      password: "New secret",
-      role: UserRoles.ADMIN,
       tenantId: 1,
     };
 
@@ -56,34 +47,28 @@ describe("user update", () => {
       await userRepository.save(userData);
 
       await supertest(createServer())
-        .patch("/api/user/1")
+        .delete("/api/user/1")
         .set("Cookie", [`accessToken=${accessToken}`])
-        .send(newUserData)
         .expect(200)
         .then((res) => {
           expect(res.ok).toBe(true);
         });
     });
 
-    it("should update user in database", async () => {
+    it("should delete user in database", async () => {
       const accessToken = jwks.token({ sub: "1", role: UserRoles.ADMIN });
 
       const userRepository = connection.getRepository(User);
       await userRepository.save(userData);
 
       await supertest(createServer())
-        .patch("/api/user/1")
+        .delete("/api/user/1")
         .set("Cookie", [`accessToken=${accessToken}`])
-        .send(newUserData)
         .expect(200);
 
       const users = await userRepository.find();
 
-      expect(users).toHaveLength(1);
-      expect(users[0].firstName).toBe(newUserData.firstName);
-      expect(users[0].lastName).toBe(newUserData.lastName);
-      expect(users[0].email).toBe(newUserData.email);
-      expect(users[0].role).toBe(newUserData.role);
+      expect(users).toHaveLength(0);
     });
 
     it("should return status 403 (Forbidden) if user is not admin", async () => {
@@ -93,25 +78,17 @@ describe("user update", () => {
       await userRepository.save(userData);
 
       await supertest(createServer())
-        .patch("/api/user/1")
+        .delete("/api/user/1")
         .set("Cookie", [`accessToken=${accessToken}`])
-        .send(newUserData)
         .expect(403);
 
       const users = await userRepository.find();
 
       expect(users).toHaveLength(1);
-      expect(users[0].firstName).toBe(userData.firstName);
-      expect(users[0].lastName).toBe(userData.lastName);
-      expect(users[0].email).toBe(userData.email);
-      expect(users[0].role).toBe(userData.role);
     });
 
     it("should return status 401 if token does not exists", async () => {
-      await supertest(createServer())
-        .patch("/api/user/1")
-        .send(newUserData)
-        .expect(401);
+      await supertest(createServer()).delete("/api/user/1").expect(401);
     });
   });
 });

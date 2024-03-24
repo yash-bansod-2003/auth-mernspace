@@ -6,7 +6,7 @@ import createJWKSMock from "mock-jwks";
 import { Tenant } from "@/entity/tenant";
 import { UserRoles } from "@/constants";
 
-describe("tenent create", () => {
+describe("tenent update", () => {
   let connection: DataSource;
   let jwks: ReturnType<typeof createJWKSMock>;
 
@@ -89,7 +89,7 @@ describe("tenent create", () => {
       expect(tenants[0].address).toBe(tenantData.address);
     });
 
-    it.skip("should return status 403 (Forbidden) if user is not admin", async () => {
+    it("should return status 403 (Forbidden) if user is not admin", async () => {
       const accessToken = jwks.token({ sub: "1", role: UserRoles.CUSTOMER });
 
       const tenantRepository = connection.getRepository(Tenant);
@@ -108,7 +108,7 @@ describe("tenent create", () => {
       expect(tenants[0].address).toBe(tenantData.address);
     });
 
-    it.skip("should return 422 (Unprocessable Entity) if name filed is missing", async () => {
+    it("should return 422 (Unprocessable Entity) if name filed is missing", async () => {
       const accessToken = jwks.token({ sub: "1", role: UserRoles.ADMIN });
 
       const tenantData = {
@@ -127,7 +127,7 @@ describe("tenent create", () => {
       expect(tenants).toHaveLength(0);
     });
 
-    it.skip("should return 422 (Unprocessable Entity) if address filed is missing", async () => {
+    it("should return 422 (Unprocessable Entity) if address filed is missing", async () => {
       const accessToken = jwks.token({ sub: "1", role: UserRoles.ADMIN });
 
       const tenantData = {
