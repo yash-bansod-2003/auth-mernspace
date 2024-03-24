@@ -10,7 +10,7 @@ class AuthService {
     this.userRepository = userRepository;
   }
 
-  async create({ firstName, lastName, email, password }: UserData) {
+  async create({ firstName, lastName, email, password, role }: UserData) {
     const user = await this.userRepository.findOne({ where: { email } });
 
     if (user) {
@@ -27,7 +27,7 @@ class AuthService {
         lastName,
         email,
         password: hashedPassword,
-        role: UserRoles.CUSTOMER,
+        role: role || UserRoles.CUSTOMER,
       });
     } catch (err) {
       const error = createHttpError(500, String(err));

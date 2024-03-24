@@ -39,6 +39,26 @@ class TenantService {
       throw err;
     }
   }
+
+  async remove(id: number) {
+    try {
+      const tenent = await this.tenantRepository.delete({ id });
+      return tenent;
+    } catch (error) {
+      const err = createHttpError(500, String(error));
+      throw err;
+    }
+  }
+
+  async update(id: number, data: TenantData) {
+    try {
+      const tenent = await this.tenantRepository.update({ id }, data);
+      return tenent;
+    } catch (error) {
+      const err = createHttpError(500, String(error));
+      throw err;
+    }
+  }
 }
 
 export { TenantService };

@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser";
 import { errorHandler } from "@/middlewares/error-handler";
 import { authRouter } from "@/routes/auth.router";
 import { tenantRouter } from "@/routes/tenant.router";
+import { userRouter } from "@/routes/user.router";
 
 export const createServer = (): Express => {
   const app = express();
@@ -24,6 +25,7 @@ export const createServer = (): Express => {
     })
     .use("/api/auth", authRouter)
     .use("/api", tenantRouter)
+    .use("/api", userRouter)
     .use(errorHandler);
 
   return app;

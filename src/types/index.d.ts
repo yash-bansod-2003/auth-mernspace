@@ -6,6 +6,7 @@ export interface UserData {
   email: string;
   password: string;
   role?: string;
+  tenantId?: number;
 }
 
 interface TenantData {
@@ -19,4 +20,8 @@ export interface AuthenticatedRequest extends Request {
     role: string;
     jti: string;
   };
+}
+
+export interface UserCreateRequest extends AuthenticatedRequest {
+  body: UserData;
 }
