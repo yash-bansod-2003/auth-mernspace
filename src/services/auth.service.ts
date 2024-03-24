@@ -68,6 +68,28 @@ class AuthService {
       throw error;
     }
   }
+
+  async update(id: number, data: UserData) {
+    try {
+      const user = await this.userRepository.update({ id }, data);
+
+      return user;
+    } catch (err) {
+      const error = createHttpError(500);
+      throw error;
+    }
+  }
+
+  async remove(id: number) {
+    try {
+      const user = await this.userRepository.delete({ id });
+
+      return user;
+    } catch (err) {
+      const error = createHttpError(500);
+      throw error;
+    }
+  }
 }
 
 export { AuthService };

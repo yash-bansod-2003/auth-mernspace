@@ -25,3 +25,9 @@ export interface AuthenticatedRequest extends Request {
 export interface UserCreateRequest extends AuthenticatedRequest {
   body: UserData;
 }
+
+export interface UserRequestWithParama extends UserCreateRequest {
+  params: {
+    id: string;
+  };
+}
