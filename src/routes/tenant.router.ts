@@ -1,5 +1,8 @@
 import express, { Request, Response, NextFunction } from "express";
-import { TenantController } from "@/controllers/tenant.controller";
+import {
+  TenantController,
+  TenantWithParams,
+} from "@/controllers/tenant.controller";
 import { AppDataSource } from "@/data-source";
 import { Tenant } from "@/entity/tenant";
 import { TenantService } from "@/services/tenant.service";
@@ -40,6 +43,25 @@ router.get(
   canAccess([UserRoles.ADMIN]),
   async (req: Request, res: Response, next: NextFunction) => {
     await tenantController.indexOne(req as AuthenticatedRequest, res, next);
+  },
+);
+
+router.patch(
+  "/tenant/:id",
+  tenentCreateValidator,
+  authenticate,
+  canAccess([UserRoles.ADMIN]),
+  async (req: Request, res: Response, next: NextFunction) => {
+    await tenantController.update(req as TenantWithParams, res, next);
+  },
+);
+
+router.delete(
+  "/tenant/:id",
+  authenticate,
+  canAccess([UserRoles.ADMIN]),
+  async (req: Request, res: Response, next: NextFunction) => {
+    await tenantController.destroy(req as TenantWithParams, res, next);
   },
 );
 
