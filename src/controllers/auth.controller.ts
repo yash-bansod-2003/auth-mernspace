@@ -66,11 +66,16 @@ class AuthController {
         newRefreshToken.id,
       );
 
+      // Set the "Secure" flag on the cookie if the connection is https
+      const secureCookie =
+        req.secure || req.headers["x-forwarded-proto"] === "https";
+
       res.cookie("accessToken", accessToken, {
         httpOnly: true,
         domain: "localhost",
         sameSite: "strict",
         maxAge: 1000 * 60 * 60,
+        secure: secureCookie,
       });
 
       res.cookie("refreshToken", refreshToken, {
@@ -78,6 +83,7 @@ class AuthController {
         domain: "localhost",
         sameSite: "strict",
         maxAge: 1000 * 60 * 60 * 24 * 365,
+        secure: secureCookie,
       });
 
       return res.status(201).json({ id: user.id });
