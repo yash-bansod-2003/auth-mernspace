@@ -10,13 +10,13 @@ import { userRouter } from "@/routes/user.router";
 export const createServer = (): Express => {
   const app = express();
   app
-    .disable("x-powered-by")
-    .use(express.static("public"))
-    .use(morgan("dev"))
-    .use(urlencoded({ extended: true }))
-    .use(json())
-    .use(cookieParser())
     .use(cors({ origin: ["http://localhost:5173"], credentials: true }))
+    .use(json())
+    .use(urlencoded({ extended: true }))
+    .use(morgan("dev"))
+    .use(cookieParser())
+    .use(express.static("public"))
+    .disable("x-powered-by")
     .get("/status", (_, res) => {
       return res.json({ ok: true });
     })
