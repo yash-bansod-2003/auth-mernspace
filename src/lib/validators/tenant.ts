@@ -11,3 +11,23 @@ export const tenentCreateValidator = checkSchema({
     notEmpty: true,
   },
 });
+
+export const tenantSearchQueryValidator = checkSchema(
+  {
+    page: {
+      customSanitizer: {
+        options: (value) => {
+          return Number.isNaN(Number(value)) ? 1 : Number(value);
+        },
+      },
+    },
+    limit: {
+      customSanitizer: {
+        options: (value) => {
+          return Number.isNaN(Number(value)) ? 10 : Number(value);
+        },
+      },
+    },
+  },
+  ["query"],
+);

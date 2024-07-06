@@ -1,6 +1,6 @@
 import { Tenant } from "@/entity/tenant";
 import { Repository } from "typeorm";
-import { TenantData } from "@/types";
+import { TenantData, TenantSearchQueryParams } from "@/types";
 import createHttpError from "http-errors";
 
 class TenantService {
@@ -20,9 +20,14 @@ class TenantService {
     }
   }
 
-  async findAll() {
+  async findAll(searchQueryParams: TenantSearchQueryParams) {
+    const { page, limit } = searchQueryParams;
     try {
-      const tenents = await this.tenantRepository.find();
+      const queryBuilder = this.tenantRepository.createQueryBuilder();
+      const tenents = queryBuilder
+        .skip((page - 1) * limit)
+        .take(limit)
+        .getMany();
       return tenents;
     } catch (error) {
       const err = createHttpError(500, String(error));

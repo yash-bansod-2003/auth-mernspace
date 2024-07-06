@@ -87,7 +87,7 @@ class AuthService {
       const users = await queryBuilder
         .skip((page - 1) * limit)
         .take(limit)
-        .getManyAndCount();
+        .getMany();
 
       return users;
     } catch (err) {

@@ -7,7 +7,10 @@ import { AppDataSource } from "@/data-source";
 import { Tenant } from "@/entity/tenant";
 import { TenantService } from "@/services/tenant.service";
 import { AuthenticatedRequest } from "@/types";
-import { tenentCreateValidator } from "@/lib/validators/tenant";
+import {
+  tenentCreateValidator,
+  tenantSearchQueryValidator,
+} from "@/lib/validators/tenant";
 import { logger } from "@/config/logger";
 import authenticate from "@/middlewares/authenticate";
 import { canAccess } from "@/middlewares/can-access";
@@ -32,6 +35,7 @@ router.get(
   "/tenant",
   authenticate,
   canAccess([UserRoles.ADMIN]),
+  tenantSearchQueryValidator,
   async (req: Request, res: Response, next: NextFunction) => {
     await tenantController.indexAll(req as AuthenticatedRequest, res, next);
   },

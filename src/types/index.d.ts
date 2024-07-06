@@ -36,3 +36,8 @@ export interface UserSearchQueryParams {
   page: number;
   limit: number;
 }
+
+export interface TenantSearchQueryParams {
+  page: number;
+  limit: number;
+}

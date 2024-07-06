@@ -1,7 +1,11 @@
 import { TenantService } from "@/services/tenant.service";
-import { AuthenticatedRequest, TenantData } from "@/types";
+import {
+  AuthenticatedRequest,
+  TenantData,
+  TenantSearchQueryParams,
+} from "@/types";
 import { NextFunction, Response } from "express";
-import { validationResult } from "express-validator";
+import { matchedData, validationResult } from "express-validator";
 import createHttpError from "http-errors";
 import { Logger } from "winston";
 
@@ -47,9 +51,18 @@ class TenantController {
   }
 
   async indexAll(req: AuthenticatedRequest, res: Response, next: NextFunction) {
+    const searchQueryParams = matchedData(req, {
+      onlyValidData: true,
+    }) as TenantSearchQueryParams;
+    const { page, limit } = searchQueryParams;
     try {
-      const tenants = await this.tenantService.findAll();
-      return res.json(tenants);
+      const tenants = await this.tenantService.findAll(searchQueryParams);
+      return res.json({
+        page,
+        limit,
+        count: tenants.length,
+        data: tenants,
+      });
     } catch (error) {
       return next(error);
     }
