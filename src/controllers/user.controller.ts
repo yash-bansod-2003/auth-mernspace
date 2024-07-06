@@ -1,8 +1,12 @@
-import { Response, NextFunction } from "express";
-import { UserCreateRequest, UserRequestWithParama } from "@/types";
+import { Request, Response, NextFunction } from "express";
+import {
+  UserCreateRequest,
+  UserRequestWithParama,
+  UserSearchQueryParams,
+} from "@/types";
 import { AuthService } from "@/services/auth.service";
 import { Logger } from "winston";
-import { validationResult } from "express-validator";
+import { matchedData, validationResult } from "express-validator";
 import createHttpError from "http-errors";
 
 class UserController {
@@ -21,13 +25,14 @@ class UserController {
       return res.status(422).json({ errors: errors.array() });
     }
 
-    const { firstName, lastName, email, password, role } = req.body;
+    const { firstName, lastName, email, password, role, tenantId } = req.body;
 
     this.logger.debug("new request to create a user", {
       firstName,
       lastName,
       email,
       role,
+      tenantId,
     });
 
     try {
@@ -37,6 +42,7 @@ class UserController {
         email,
         password,
         role,
+        tenantId,
       });
 
       this.logger.info("User has been registered", { id: user.id });
@@ -132,19 +138,23 @@ class UserController {
     }
   }
 
-  async indexAll(
-    req: UserRequestWithParama,
-    res: Response,
-    next: NextFunction,
-  ) {
+  async indexAll(req: Request, res: Response, next: NextFunction) {
     this.logger.debug("new request to get all users");
-
+    const searchQueryParams = matchedData(req, {
+      onlyValidData: true,
+    }) as UserSearchQueryParams;
+    const { page, limit } = searchQueryParams;
     try {
-      const users = await this.userService.getAll();
+      const users = await this.userService.getAll(searchQueryParams);
 
       this.logger.info("all users are fetched");
 
-      return res.json(users);
+      return res.json({
+        page,
+        limit,
+        count: users.length,
+        data: users,
+      });
     } catch (error) {
       return next(error);
     }

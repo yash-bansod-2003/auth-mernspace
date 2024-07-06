@@ -1,6 +1,6 @@
 import { User } from "@/entity/user";
 import { Repository } from "typeorm";
-import { UserData } from "@/types";
+import { UserData, UserSearchQueryParams } from "@/types";
 import createHttpError from "http-errors";
 import { UserRoles } from "@/constants";
 import bcrypt from "bcryptjs";
@@ -10,7 +10,14 @@ class AuthService {
     this.userRepository = userRepository;
   }
 
-  async create({ firstName, lastName, email, password, role }: UserData) {
+  async create({
+    firstName,
+    lastName,
+    email,
+    password,
+    role,
+    tenantId,
+  }: UserData) {
     const user = await this.userRepository.findOne({ where: { email } });
 
     if (user) {
@@ -28,6 +35,7 @@ class AuthService {
         email,
         password: hashedPassword,
         role: role || UserRoles.CUSTOMER,
+        tenantId,
       });
     } catch (err) {
       const error = createHttpError(500, String(err));
@@ -72,9 +80,15 @@ class AuthService {
     }
   }
 
-  async getAll() {
+  async getAll(searchQueryParams: UserSearchQueryParams) {
     try {
-      const users = await this.userRepository.find();
+      const { page, limit } = searchQueryParams;
+      const queryBuilder = this.userRepository.createQueryBuilder();
+      const users = await queryBuilder
+        .skip((page - 1) * limit)
+        .take(limit)
+        .getManyAndCount();
+
       return users;
     } catch (err) {
       const error = createHttpError(500);

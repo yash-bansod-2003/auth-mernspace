@@ -31,3 +31,8 @@ export interface UserRequestWithParama extends UserCreateRequest {
     id: string;
   };
 }
+
+export interface UserSearchQueryParams {
+  page: number;
+  limit: number;
+}

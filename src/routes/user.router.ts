@@ -6,7 +6,10 @@ import { AuthService } from "@/services/auth.service";
 import authenticate from "@/middlewares/authenticate";
 import { canAccess } from "@/middlewares/can-access";
 import { UserRoles } from "@/constants";
-import { userCreateValidator } from "@/lib/validators/user";
+import {
+  userCreateValidator,
+  userSearchQueryValidator,
+} from "@/lib/validators/user";
 import { logger } from "@/config/logger";
 import { UserCreateRequest, UserRequestWithParama } from "@/types";
 
@@ -58,8 +61,9 @@ router.get(
   "/user",
   authenticate,
   canAccess([UserRoles.ADMIN]),
+  userSearchQueryValidator,
   async (req: Request, res: Response, next: NextFunction) => {
-    await userController.indexAll(req as UserRequestWithParama, res, next);
+    await userController.indexAll(req, res, next);
   },
 );
 
