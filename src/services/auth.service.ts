@@ -60,7 +60,10 @@ class AuthService {
 
   async me({ id }: { id: number }) {
     try {
-      const user = await this.userRepository.findOne({ where: { id } });
+      const user = await this.userRepository.findOne({
+        where: { id },
+        relations: { tenant: true },
+      });
 
       return user;
     } catch (err) {
