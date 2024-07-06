@@ -1,7 +1,7 @@
 {
-  "name": "templete-node-ts-express-jest",
+  "name": "mernspace-aut-service",
   "version": "1.0.0",
-  "description": "a best practice templete for follow industries standards and clean code",
+  "description": "authentication management service for mernspace food delivering application",
   "main": "index.js",
   "scripts": {
     "start": "cross-env NODE_ENV=production node dist/index.js",
