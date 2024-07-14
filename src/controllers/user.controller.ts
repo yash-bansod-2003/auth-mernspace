@@ -152,8 +152,8 @@ class UserController {
       return res.json({
         page,
         limit,
-        count: users.length,
-        data: users,
+        count: users[1],
+        data: users[0],
       });
     } catch (error) {
       return next(error);
