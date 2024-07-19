@@ -7,7 +7,7 @@ import { User } from "@/entity/user";
 import { UserRoles } from "@/constants";
 import { UserData } from "@/types";
 
-describe("user create", () => {
+describe("Admin Create User", () => {
   let connection: DataSource;
   let jwks: ReturnType<typeof createJWKSMock>;
 
@@ -30,7 +30,7 @@ describe("user create", () => {
     await connection.destroy();
   });
 
-  describe("post /api/user", () => {
+  describe("post /api/v1/admin/users", () => {
     const userData: UserData = {
       firstName: "yash",
       lastName: "bansod",
@@ -44,7 +44,7 @@ describe("user create", () => {
       const accessToken = jwks.token({ sub: "1", role: UserRoles.ADMIN });
 
       await supertest(createServer())
-        .post("/api/user")
+        .post("/api/v1/admin/users")
         .set("Cookie", [`accessToken=${accessToken}`])
         .send(userData)
         .expect(201)
@@ -57,7 +57,7 @@ describe("user create", () => {
       const accessToken = jwks.token({ sub: "1", role: UserRoles.ADMIN });
 
       await supertest(createServer())
-        .post("/api/user")
+        .post("/api/v1/admin/users")
         .set("Cookie", [`accessToken=${accessToken}`])
         .send(userData)
         .expect(201);
@@ -76,7 +76,7 @@ describe("user create", () => {
       const accessToken = jwks.token({ sub: "1", role: UserRoles.CUSTOMER });
 
       await supertest(createServer())
-        .post("/api/user")
+        .post("/api/v1/admin/users")
         .set("Cookie", [`accessToken=${accessToken}`])
         .send(userData)
         .expect(403);
@@ -89,7 +89,7 @@ describe("user create", () => {
 
     it("should return status 401 if token does not exists", async () => {
       await supertest(createServer())
-        .post("/api/user")
+        .post("/api/v1/admin/users")
         .send(userData)
         .expect(401);
     });

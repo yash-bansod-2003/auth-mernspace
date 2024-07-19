@@ -23,9 +23,9 @@ export const createServer = (): Express => {
     .get("/message/:name", (req, res) => {
       return res.json({ message: `hello ${req.params.name}` });
     })
-    .use("/api/auth", authRouter)
-    .use("/api", tenantRouter)
-    .use("/api", userRouter)
+    .use("/api/v1", authRouter)
+    .use("/api/v1", tenantRouter)
+    .use("/api/v1/admin", userRouter)
     .use(errorHandler);
 
   return app;

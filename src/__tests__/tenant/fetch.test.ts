@@ -6,7 +6,7 @@ import createJWKSMock from "mock-jwks";
 import { UserRoles } from "@/constants";
 import { Tenant } from "@/entity/tenant";
 
-describe("tenent fetch", () => {
+describe("Tenant Fetch", () => {
   let connection: DataSource;
   let jwks: ReturnType<typeof createJWKSMock>;
 
@@ -29,12 +29,12 @@ describe("tenent fetch", () => {
     await connection.destroy();
   });
 
-  describe("get /api/tenant", () => {
+  describe("get /api/v1/tenants", () => {
     it("should return status 200", async () => {
       const accessToken = jwks.token({ sub: "1", role: UserRoles.ADMIN });
 
       await supertest(createServer())
-        .get("/api/tenant")
+        .get("/api/v1/tenants")
         .set("Cookie", [`accessToken=${accessToken}`])
         .expect(200)
         .then((res) => {
@@ -46,30 +46,35 @@ describe("tenent fetch", () => {
       const accessToken = jwks.token({ sub: "1", role: UserRoles.CUSTOMER });
 
       await supertest(createServer())
-        .get("/api/tenant")
+        .get("/api/v1/tenants")
         .set("Cookie", [`accessToken=${accessToken}`])
         .expect(403);
     });
 
-    it("should return array in response", async () => {
+    it("should return paginated tenants", async () => {
       const accessToken = jwks.token({ sub: "1", role: UserRoles.ADMIN });
 
       await supertest(createServer())
-        .get("/api/tenant")
+        .get("/api/v1/tenants")
         .set("Cookie", [`accessToken=${accessToken}`])
         .expect(200)
         .then((res) => {
-          expect(Array.isArray(res.body)).toBeTruthy();
+          expect(res.body).toEqual({
+            page: 1,
+            limit: 10,
+            count: 0,
+            data: [],
+          });
         });
     });
   });
 
-  describe("get /api/tenant/:id", () => {
+  describe("get /api/v1/tenants/:tenantId", () => {
     it("should return status 200", async () => {
       const accessToken = jwks.token({ sub: "1", role: UserRoles.ADMIN });
 
       await supertest(createServer())
-        .get("/api/tenant/1")
+        .get("/api/v1/tenants/1")
         .set("Cookie", [`accessToken=${accessToken}`])
         .expect(200)
         .then((res) => {
@@ -81,7 +86,7 @@ describe("tenent fetch", () => {
       const accessToken = jwks.token({ sub: "1", role: UserRoles.CUSTOMER });
 
       await supertest(createServer())
-        .get("/api/tenant/1")
+        .get("/api/v1/tenants/1")
         .set("Cookie", [`accessToken=${accessToken}`])
         .expect(403);
     });
@@ -97,7 +102,7 @@ describe("tenent fetch", () => {
       await tenantRepository.save(tenantData);
 
       await supertest(createServer())
-        .get("/api/tenant/1")
+        .get("/api/v1/tenants/1")
         .set("Cookie", [`accessToken=${accessToken}`])
         .expect(200)
         .then((res) => {

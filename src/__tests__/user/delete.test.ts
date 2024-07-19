@@ -7,7 +7,7 @@ import { User } from "@/entity/user";
 import { UserRoles } from "@/constants";
 import { UserData } from "@/types";
 
-describe("user create", () => {
+describe("Admin Delete User", () => {
   let connection: DataSource;
   let jwks: ReturnType<typeof createJWKSMock>;
 
@@ -30,7 +30,7 @@ describe("user create", () => {
     await connection.destroy();
   });
 
-  describe("delete /api/user/1", () => {
+  describe("delete /api/v1/admin/users/:userId", () => {
     const userData: UserData = {
       firstName: "yash",
       lastName: "bansod",
@@ -47,7 +47,7 @@ describe("user create", () => {
       await userRepository.save(userData);
 
       await supertest(createServer())
-        .delete("/api/user/1")
+        .delete("/api/v1/admin/users/1")
         .set("Cookie", [`accessToken=${accessToken}`])
         .expect(200)
         .then((res) => {
@@ -62,7 +62,7 @@ describe("user create", () => {
       await userRepository.save(userData);
 
       await supertest(createServer())
-        .delete("/api/user/1")
+        .delete("/api/v1/admin/users/1")
         .set("Cookie", [`accessToken=${accessToken}`])
         .expect(200);
 
@@ -78,7 +78,7 @@ describe("user create", () => {
       await userRepository.save(userData);
 
       await supertest(createServer())
-        .delete("/api/user/1")
+        .delete("/api/v1/admin/users/1")
         .set("Cookie", [`accessToken=${accessToken}`])
         .expect(403);
 
@@ -88,7 +88,9 @@ describe("user create", () => {
     });
 
     it("should return status 401 if token does not exists", async () => {
-      await supertest(createServer()).delete("/api/user/1").expect(401);
+      await supertest(createServer())
+        .delete("/api/v1/admin/users/1")
+        .expect(401);
     });
   });
 });

@@ -33,7 +33,7 @@ router.post(
 );
 
 router.get(
-  "/self",
+  "/user",
   authenticate,
   async (req: Request, res: Response, next: NextFunction) => {
     await authController.self(req as AuthenticatedRequest, res, next);

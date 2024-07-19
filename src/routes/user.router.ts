@@ -20,7 +20,7 @@ const authService = new AuthService(userRepository);
 const userController = new UserController(authService, logger);
 
 router.post(
-  "/user",
+  "/users",
   userCreateValidator,
   authenticate,
   canAccess([UserRoles.ADMIN]),
@@ -30,7 +30,7 @@ router.post(
 );
 
 router.patch(
-  "/user/:id",
+  "/users/:id",
   userCreateValidator,
   authenticate,
   canAccess([UserRoles.ADMIN]),
@@ -40,7 +40,7 @@ router.patch(
 );
 
 router.delete(
-  "/user/:id",
+  "/users/:id",
   authenticate,
   canAccess([UserRoles.ADMIN]),
   async (req: Request, res: Response, next: NextFunction) => {
@@ -49,7 +49,7 @@ router.delete(
 );
 
 router.get(
-  "/user/:id",
+  "/users/:id",
   authenticate,
   canAccess([UserRoles.ADMIN]),
   async (req: Request, res: Response, next: NextFunction) => {
@@ -58,7 +58,7 @@ router.get(
 );
 
 router.get(
-  "/user",
+  "/users",
   authenticate,
   canAccess([UserRoles.ADMIN]),
   userSearchQueryValidator,

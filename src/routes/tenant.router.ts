@@ -22,7 +22,7 @@ const tenantService = new TenantService(tenantRepository);
 const tenantController = new TenantController(tenantService, logger);
 
 router.post(
-  "/tenant",
+  "/tenants",
   tenentCreateValidator,
   authenticate,
   canAccess([UserRoles.ADMIN]),
@@ -32,7 +32,7 @@ router.post(
 );
 
 router.get(
-  "/tenant",
+  "/tenants",
   authenticate,
   canAccess([UserRoles.ADMIN]),
   tenantSearchQueryValidator,
@@ -42,7 +42,7 @@ router.get(
 );
 
 router.get(
-  "/tenant/:id",
+  "/tenants/:id",
   authenticate,
   canAccess([UserRoles.ADMIN]),
   async (req: Request, res: Response, next: NextFunction) => {
@@ -51,7 +51,7 @@ router.get(
 );
 
 router.patch(
-  "/tenant/:id",
+  "/tenants/:id",
   tenentCreateValidator,
   authenticate,
   canAccess([UserRoles.ADMIN]),
@@ -61,7 +61,7 @@ router.patch(
 );
 
 router.delete(
-  "/tenant/:id",
+  "/tenants/:id",
   authenticate,
   canAccess([UserRoles.ADMIN]),
   async (req: Request, res: Response, next: NextFunction) => {

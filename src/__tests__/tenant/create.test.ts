@@ -6,7 +6,7 @@ import createJWKSMock from "mock-jwks";
 import { Tenant } from "@/entity/tenant";
 import { UserRoles } from "@/constants";
 
-describe("tenent create", () => {
+describe("Tenant Create", () => {
   let connection: DataSource;
   let jwks: ReturnType<typeof createJWKSMock>;
 
@@ -29,7 +29,7 @@ describe("tenent create", () => {
     await connection.destroy();
   });
 
-  describe("post /api/tenant", () => {
+  describe("post /api/v1/tenants", () => {
     it("should return status 201", async () => {
       const accessToken = jwks.token({ sub: "1", role: UserRoles.ADMIN });
 
@@ -39,7 +39,7 @@ describe("tenent create", () => {
       };
 
       await supertest(createServer())
-        .post("/api/tenant")
+        .post("/api/v1/tenants")
         .set("Cookie", [`accessToken=${accessToken}`])
         .send(tenantData)
         .expect(201)
@@ -57,7 +57,7 @@ describe("tenent create", () => {
       };
 
       await supertest(createServer())
-        .post("/api/tenant")
+        .post("/api/v1/tenants")
         .set("Cookie", [`accessToken=${accessToken}`])
         .send(tenantData)
         .expect(201);
@@ -77,7 +77,7 @@ describe("tenent create", () => {
       };
 
       await supertest(createServer())
-        .post("/api/tenant")
+        .post("/api/v1/tenants")
         .send(tenantData)
         .expect(401);
 
@@ -96,7 +96,7 @@ describe("tenent create", () => {
       };
 
       await supertest(createServer())
-        .post("/api/tenant")
+        .post("/api/v1/tenants")
         .set("Cookie", [`accessToken=${accessToken}`])
         .send(tenantData)
         .expect(403);
@@ -115,7 +115,7 @@ describe("tenent create", () => {
       };
 
       await supertest(createServer())
-        .post("/api/tenant")
+        .post("/api/v1/tenants")
         .set("Cookie", [`accessToken=${accessToken}`])
         .send(tenantData)
         .expect(422);
@@ -134,7 +134,7 @@ describe("tenent create", () => {
       };
 
       await supertest(createServer())
-        .post("/api/tenant")
+        .post("/api/v1/tenants")
         .set("Cookie", [`accessToken=${accessToken}`])
         .send(tenantData)
         .expect(422);
