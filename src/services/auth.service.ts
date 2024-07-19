@@ -66,10 +66,10 @@ class AuthService {
     }
   }
 
-  async me({ id }: { id: number }) {
+  async me({ userId }: { userId: number }) {
     try {
       const user = await this.userRepository.findOne({
-        where: { id },
+        where: { id: userId },
         relations: { tenant: true },
       });
 
@@ -96,9 +96,9 @@ class AuthService {
     }
   }
 
-  async update(id: number, data: UserData) {
+  async update(userId: number, data: UserData) {
     try {
-      const user = await this.userRepository.update({ id }, data);
+      const user = await this.userRepository.update({ id: userId }, data);
 
       return user;
     } catch (err) {

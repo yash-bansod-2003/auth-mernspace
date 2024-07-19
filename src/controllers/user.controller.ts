@@ -55,7 +55,7 @@ class UserController {
 
   async update(req: UserRequestWithParama, res: Response, next: NextFunction) {
     const errors = validationResult(req);
-    const userId = req.params.id;
+    const userId = req.params.userId;
 
     if (!errors.isEmpty()) {
       return res.status(422).json({ errors: errors.array() });
@@ -93,7 +93,7 @@ class UserController {
   }
 
   async destroy(req: UserRequestWithParama, res: Response, next: NextFunction) {
-    const userId = req.params.id;
+    const userId = req.params.userId;
 
     if (isNaN(Number(userId))) {
       next(createHttpError(400, "Invalid url param."));
@@ -118,7 +118,7 @@ class UserController {
     res: Response,
     next: NextFunction,
   ) {
-    const userId = req.params.id;
+    const userId = req.params.userId;
 
     if (isNaN(Number(userId))) {
       next(createHttpError(400, "Invalid url param."));
@@ -128,7 +128,7 @@ class UserController {
     this.logger.debug("new request to get a data of a single user");
 
     try {
-      const user = await this.userService.me({ id: Number(userId) });
+      const user = await this.userService.me({ userId: Number(userId) });
 
       this.logger.info("User has been fetched", user);
 

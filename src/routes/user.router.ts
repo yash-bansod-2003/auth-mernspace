@@ -30,7 +30,7 @@ router.post(
 );
 
 router.patch(
-  "/users/:id",
+  "/users/:userId",
   userCreateValidator,
   authenticate,
   canAccess([UserRoles.ADMIN]),
@@ -40,7 +40,7 @@ router.patch(
 );
 
 router.delete(
-  "/users/:id",
+  "/users/:userId",
   authenticate,
   canAccess([UserRoles.ADMIN]),
   async (req: Request, res: Response, next: NextFunction) => {
@@ -49,7 +49,7 @@ router.delete(
 );
 
 router.get(
-  "/users/:id",
+  "/users/:userId",
   authenticate,
   canAccess([UserRoles.ADMIN]),
   async (req: Request, res: Response, next: NextFunction) => {
