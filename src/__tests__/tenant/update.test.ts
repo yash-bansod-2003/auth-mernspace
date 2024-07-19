@@ -108,7 +108,7 @@ describe("Tenant Update", () => {
       expect(tenants[0].address).toBe(tenantData.address);
     });
 
-    it.skip("should return 422 (Unprocessable Entity) if name filed is missing", async () => {
+    it("should return 422 (Unprocessable Entity) if name filed is missing", async () => {
       const accessToken = jwks.token({ sub: "1", role: UserRoles.ADMIN });
 
       const tenantData = {
@@ -116,18 +116,13 @@ describe("Tenant Update", () => {
       };
 
       await supertest(createServer())
-        .post("/api/v1/tenants/1")
+        .patch("/api/v1/tenants/1")
         .set("Cookie", [`accessToken=${accessToken}`])
         .send(tenantData)
         .expect(422);
-
-      const tenantRepository = connection.getRepository(Tenant);
-      const tenants = await tenantRepository.find();
-
-      expect(tenants).toHaveLength(0);
     });
 
-    it.skip("should return 422 (Unprocessable Entity) if address filed is missing", async () => {
+    it("should return 422 (Unprocessable Entity) if address filed is missing", async () => {
       const accessToken = jwks.token({ sub: "1", role: UserRoles.ADMIN });
 
       const tenantData = {
@@ -135,15 +130,10 @@ describe("Tenant Update", () => {
       };
 
       await supertest(createServer())
-        .post("/api/v1/tenants/1")
+        .patch("/api/v1/tenants/1")
         .set("Cookie", [`accessToken=${accessToken}`])
         .send(tenantData)
         .expect(422);
-
-      const tenantRepository = connection.getRepository(Tenant);
-      const tenants = await tenantRepository.find();
-
-      expect(tenants).toHaveLength(0);
     });
   });
 });
