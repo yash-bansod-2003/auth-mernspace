@@ -16,7 +16,7 @@ interface TenantCreateRequest extends AuthenticatedRequest {
 export interface TenantWithParams extends TenantCreateRequest {
   body: TenantData;
   params: {
-    id: string;
+    tenantId: string;
   };
 }
 
@@ -70,7 +70,9 @@ class TenantController {
 
   async indexOne(req: AuthenticatedRequest, res: Response, next: NextFunction) {
     try {
-      const tenant = await this.tenantService.findOne(Number(req.params.id));
+      const tenant = await this.tenantService.findOne(
+        Number(req.params.tenantId),
+      );
       return res.json(tenant);
     } catch (error) {
       return next(error);
@@ -80,7 +82,7 @@ class TenantController {
   async update(req: TenantWithParams, res: Response, next: NextFunction) {
     this.logger.debug("New Request to update tenant");
 
-    const tenantId = req.params.id;
+    const tenantId = req.params.tenantId;
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
@@ -110,7 +112,7 @@ class TenantController {
   async destroy(req: TenantWithParams, res: Response, next: NextFunction) {
     this.logger.debug("New Request to delete tenant");
 
-    const tenantId = req.params.id;
+    const tenantId = req.params.tenantId;
 
     if (isNaN(Number(tenantId))) {
       next(createHttpError(400, "Invalid url param."));

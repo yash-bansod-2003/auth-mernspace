@@ -35,9 +35,11 @@ class TenantService {
     }
   }
 
-  async findOne(id: number) {
+  async findOne(tenantId: number) {
     try {
-      const tenent = await this.tenantRepository.find({ where: { id } });
+      const tenent = await this.tenantRepository.find({
+        where: { id: tenantId },
+      });
       return tenent;
     } catch (error) {
       const err = createHttpError(500, String(error));
@@ -45,9 +47,9 @@ class TenantService {
     }
   }
 
-  async remove(id: number) {
+  async remove(tenantId: number) {
     try {
-      const tenent = await this.tenantRepository.delete({ id });
+      const tenent = await this.tenantRepository.delete({ id: tenantId });
       return tenent;
     } catch (error) {
       const err = createHttpError(500, String(error));
@@ -55,9 +57,9 @@ class TenantService {
     }
   }
 
-  async update(id: number, data: TenantData) {
+  async update(tenantId: number, data: TenantData) {
     try {
-      const tenent = await this.tenantRepository.update({ id }, data);
+      const tenent = await this.tenantRepository.update({ id: tenantId }, data);
       return tenent;
     } catch (error) {
       const err = createHttpError(500, String(error));

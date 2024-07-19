@@ -42,7 +42,7 @@ router.get(
 );
 
 router.get(
-  "/tenants/:id",
+  "/tenants/:tenantId",
   authenticate,
   canAccess([UserRoles.ADMIN]),
   async (req: Request, res: Response, next: NextFunction) => {
@@ -51,7 +51,7 @@ router.get(
 );
 
 router.patch(
-  "/tenants/:id",
+  "/tenants/:tenantId",
   tenentCreateValidator,
   authenticate,
   canAccess([UserRoles.ADMIN]),
@@ -61,7 +61,7 @@ router.patch(
 );
 
 router.delete(
-  "/tenants/:id",
+  "/tenants/:tenantId",
   authenticate,
   canAccess([UserRoles.ADMIN]),
   async (req: Request, res: Response, next: NextFunction) => {
