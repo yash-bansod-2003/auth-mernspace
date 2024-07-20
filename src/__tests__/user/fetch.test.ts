@@ -7,7 +7,7 @@ import { UserRoles } from "@/constants";
 import { User } from "@/entity/user";
 import { UserData } from "@/types";
 
-describe("user fetch", () => {
+describe("Admin Fetch User", () => {
   let connection: DataSource;
   let jwks: ReturnType<typeof createJWKSMock>;
 
@@ -30,12 +30,12 @@ describe("user fetch", () => {
     await connection.destroy();
   });
 
-  describe("get /api/user", () => {
+  describe("get /api/v1/admin/users", () => {
     it("should return status 200", async () => {
       const accessToken = jwks.token({ sub: "1", role: UserRoles.ADMIN });
 
       await supertest(createServer())
-        .get("/api/user")
+        .get("/api/v1/admin/users")
         .set("Cookie", [`accessToken=${accessToken}`])
         .expect(200)
         .then((res) => {
@@ -47,30 +47,35 @@ describe("user fetch", () => {
       const accessToken = jwks.token({ sub: "1", role: UserRoles.CUSTOMER });
 
       await supertest(createServer())
-        .get("/api/user")
+        .get("/api/v1/admin/users")
         .set("Cookie", [`accessToken=${accessToken}`])
         .expect(403);
     });
 
-    it("should return array in response", async () => {
+    it("should return paginated users", async () => {
       const accessToken = jwks.token({ sub: "1", role: UserRoles.ADMIN });
 
       await supertest(createServer())
-        .get("/api/user")
+        .get("/api/v1/admin/users")
         .set("Cookie", [`accessToken=${accessToken}`])
         .expect(200)
         .then((res) => {
-          expect(Array.isArray(res.body)).toBeTruthy();
+          expect(res.body).toEqual({
+            page: 1,
+            limit: 10,
+            count: 0,
+            data: [],
+          });
         });
     });
   });
 
-  describe("get /api/user/:id", () => {
+  describe("get /api/v1/admin/users/:userId", () => {
     it("should return status 200", async () => {
       const accessToken = jwks.token({ sub: "1", role: UserRoles.ADMIN });
 
       await supertest(createServer())
-        .get("/api/user/1")
+        .get("/api/v1/admin/users/1")
         .set("Cookie", [`accessToken=${accessToken}`])
         .expect(200)
         .then((res) => {
@@ -82,7 +87,7 @@ describe("user fetch", () => {
       const accessToken = jwks.token({ sub: "1", role: UserRoles.CUSTOMER });
 
       await supertest(createServer())
-        .get("/api/user/1")
+        .get("/api/v1/admin/users/1")
         .set("Cookie", [`accessToken=${accessToken}`])
         .expect(403);
     });
@@ -102,7 +107,7 @@ describe("user fetch", () => {
       await userRepository.save(userData);
 
       await supertest(createServer())
-        .get("/api/user/1")
+        .get("/api/v1/admin/users/1")
         .set("Cookie", [`accessToken=${accessToken}`])
         .expect(200)
         .then((res) => {

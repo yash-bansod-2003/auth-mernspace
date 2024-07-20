@@ -148,7 +148,7 @@ class AuthController {
     this.logger.debug("new request to self data");
 
     try {
-      const user = await this.authService.me({ id: Number(req.auth.sub) });
+      const user = await this.authService.me({ userId: Number(req.auth.sub) });
       return res.json({ ...user, password: undefined });
     } catch (error) {
       return next(error);
@@ -164,7 +164,7 @@ class AuthController {
         role: req.auth.role,
       };
 
-      const user = await this.authService.me({ id: Number(req.auth.sub) });
+      const user = await this.authService.me({ userId: Number(req.auth.sub) });
 
       if (!user) {
         return next(createHttpError(500));

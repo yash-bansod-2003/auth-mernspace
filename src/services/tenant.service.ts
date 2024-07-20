@@ -1,6 +1,6 @@
 import { Tenant } from "@/entity/tenant";
 import { Repository } from "typeorm";
-import { TenantData } from "@/types";
+import { TenantData, TenantSearchQueryParams } from "@/types";
 import createHttpError from "http-errors";
 
 class TenantService {
@@ -20,9 +20,14 @@ class TenantService {
     }
   }
 
-  async findAll() {
+  async findAll(searchQueryParams: TenantSearchQueryParams) {
+    const { page, limit } = searchQueryParams;
     try {
-      const tenents = await this.tenantRepository.find();
+      const queryBuilder = this.tenantRepository.createQueryBuilder();
+      const tenents = queryBuilder
+        .skip((page - 1) * limit)
+        .take(limit)
+        .getMany();
       return tenents;
     } catch (error) {
       const err = createHttpError(500, String(error));
@@ -30,9 +35,11 @@ class TenantService {
     }
   }
 
-  async findOne(id: number) {
+  async findOne(tenantId: number) {
     try {
-      const tenent = await this.tenantRepository.find({ where: { id } });
+      const tenent = await this.tenantRepository.find({
+        where: { id: tenantId },
+      });
       return tenent;
     } catch (error) {
       const err = createHttpError(500, String(error));
@@ -40,9 +47,9 @@ class TenantService {
     }
   }
 
-  async remove(id: number) {
+  async remove(tenantId: number) {
     try {
-      const tenent = await this.tenantRepository.delete({ id });
+      const tenent = await this.tenantRepository.delete({ id: tenantId });
       return tenent;
     } catch (error) {
       const err = createHttpError(500, String(error));
@@ -50,9 +57,9 @@ class TenantService {
     }
   }
 
-  async update(id: number, data: TenantData) {
+  async update(tenantId: number, data: TenantData) {
     try {
-      const tenent = await this.tenantRepository.update({ id }, data);
+      const tenent = await this.tenantRepository.update({ id: tenantId }, data);
       return tenent;
     } catch (error) {
       const err = createHttpError(500, String(error));

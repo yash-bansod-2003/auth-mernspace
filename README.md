@@ -20,5 +20,5 @@ sudo apt install git
 # Clone Repository Locally
 
 ```bash
-git clone git@github.com:yash-bansod-2003/starter-node.git
+git clone git@github.com:yash-bansod-2003/auth-mernspace.git
 ```

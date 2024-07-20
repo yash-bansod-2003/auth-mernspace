@@ -28,6 +28,16 @@ export interface UserCreateRequest extends AuthenticatedRequest {
 
 export interface UserRequestWithParama extends UserCreateRequest {
   params: {
-    id: string;
+    userId: string;
   };
+}
+
+export interface UserSearchQueryParams {
+  page: number;
+  limit: number;
+}
+
+export interface TenantSearchQueryParams {
+  page: number;
+  limit: number;
 }

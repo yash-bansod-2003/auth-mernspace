@@ -7,7 +7,7 @@ import { type UserData } from "@/types";
 import { UserRoles } from "@/constants";
 import { RefreshToken } from "@/entity/refresh-token";
 
-describe("auth register", () => {
+describe("Authentication Register", () => {
   let connection: DataSource;
 
   beforeAll(async () => {
@@ -23,7 +23,7 @@ describe("auth register", () => {
     await connection.destroy();
   });
 
-  describe("post /api/auth/register", () => {
+  describe("post /api/v1/register", () => {
     it("should returns status 201", async () => {
       const userData: UserData = {
         firstName: "yash",
@@ -33,7 +33,7 @@ describe("auth register", () => {
       };
 
       await supertest(createServer())
-        .post("/api/auth/register")
+        .post("/api/v1/register")
         .send(userData)
         .expect(201);
     });
@@ -47,7 +47,7 @@ describe("auth register", () => {
       };
 
       await supertest(createServer())
-        .post("/api/auth/register")
+        .post("/api/v1/register")
         .send(userData)
         .expect(201)
         .expect("Content-Type", /json/)
@@ -65,7 +65,7 @@ describe("auth register", () => {
       };
 
       await supertest(createServer())
-        .post("/api/auth/register")
+        .post("/api/v1/register")
         .send(userData)
         .expect(201);
 
@@ -88,7 +88,7 @@ describe("auth register", () => {
       };
 
       await supertest(createServer())
-        .post("/api/auth/register")
+        .post("/api/v1/register")
         .send(userData)
         .expect(201)
         .expect("Content-Type", /json/)
@@ -106,7 +106,7 @@ describe("auth register", () => {
       };
 
       await supertest(createServer())
-        .post("/api/auth/register")
+        .post("/api/v1/register")
         .send(userData)
         .expect(201);
 
@@ -126,7 +126,7 @@ describe("auth register", () => {
       };
 
       await supertest(createServer())
-        .post("/api/auth/register")
+        .post("/api/v1/register")
         .send(userData)
         .expect(201);
 
@@ -147,12 +147,12 @@ describe("auth register", () => {
       };
 
       await supertest(createServer())
-        .post("/api/auth/register")
+        .post("/api/v1/register")
         .send(userData)
         .expect(201);
 
       await supertest(createServer())
-        .post("/api/auth/register")
+        .post("/api/v1/register")
         .send(userData)
         .expect(409);
 
@@ -170,7 +170,7 @@ describe("auth register", () => {
       };
 
       await supertest(createServer())
-        .post("/api/auth/register")
+        .post("/api/v1/register")
         .send(userData)
         .expect(422);
 
@@ -188,7 +188,7 @@ describe("auth register", () => {
       };
 
       await supertest(createServer())
-        .post("/api/auth/register")
+        .post("/api/v1/register")
         .send(userData)
         .expect(422);
 
@@ -206,7 +206,7 @@ describe("auth register", () => {
       };
 
       await supertest(createServer())
-        .post("/api/auth/register")
+        .post("/api/v1/register")
         .send(userData)
         .expect(422);
 
@@ -223,7 +223,7 @@ describe("auth register", () => {
       };
 
       await supertest(createServer())
-        .post("/api/auth/register")
+        .post("/api/v1/register")
         .send(userData)
         .expect(422);
 
@@ -242,7 +242,7 @@ describe("auth register", () => {
       };
 
       await supertest(createServer())
-        .post("/api/auth/register")
+        .post("/api/v1/register")
         .send(userData)
         .expect(201);
 
@@ -262,7 +262,7 @@ describe("auth register", () => {
       };
 
       await supertest(createServer())
-        .post("/api/auth/register")
+        .post("/api/v1/register")
         .send(userData)
         .expect(201)
         .then((res) => {
@@ -284,7 +284,7 @@ describe("auth register", () => {
       };
 
       await supertest(createServer())
-        .post("/api/auth/register")
+        .post("/api/v1/register")
         .send(userData)
         .expect(201)
         .then((res) => {
@@ -306,7 +306,7 @@ describe("auth register", () => {
       };
 
       const response = await supertest(createServer())
-        .post("/api/auth/register")
+        .post("/api/v1/register")
         .send(userData)
         .expect(201);
 

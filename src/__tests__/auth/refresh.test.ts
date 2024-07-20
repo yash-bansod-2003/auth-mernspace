@@ -4,7 +4,7 @@ import supertest from "supertest";
 import { DataSource } from "typeorm";
 import createJWKSMock from "mock-jwks";
 
-describe("auth refresh", () => {
+describe("Authentication Refresh", () => {
   let connection: DataSource;
   let jwks: ReturnType<typeof createJWKSMock>;
 
@@ -27,10 +27,10 @@ describe("auth refresh", () => {
     await connection.destroy();
   });
 
-  describe("post /api/auth/refresh", () => {
+  describe("post /api/v1/refresh", () => {
     it.skip("should return status 200", async () => {
       await supertest(createServer())
-        .post("/api/auth/refresh")
+        .post("/api/v1/refresh")
         .expect(200)
         .then((res) => {
           expect(res.ok).toBe(true);

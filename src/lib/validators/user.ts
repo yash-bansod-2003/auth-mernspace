@@ -53,3 +53,23 @@ export const loginValidator = checkSchema({
     notEmpty: true,
   },
 });
+
+export const userSearchQueryValidator = checkSchema(
+  {
+    page: {
+      customSanitizer: {
+        options: (value) => {
+          return Number.isNaN(Number(value)) ? 1 : Number(value);
+        },
+      },
+    },
+    limit: {
+      customSanitizer: {
+        options: (value) => {
+          return Number.isNaN(Number(value)) ? 10 : Number(value);
+        },
+      },
+    },
+  },
+  ["query"],
+);

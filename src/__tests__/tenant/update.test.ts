@@ -6,7 +6,7 @@ import createJWKSMock from "mock-jwks";
 import { Tenant } from "@/entity/tenant";
 import { UserRoles } from "@/constants";
 
-describe("tenent update", () => {
+describe("Tenant Update", () => {
   let connection: DataSource;
   let jwks: ReturnType<typeof createJWKSMock>;
 
@@ -29,7 +29,7 @@ describe("tenent update", () => {
     await connection.destroy();
   });
 
-  describe("patch /api/tenant/:id", () => {
+  describe("patch /api/v1/tenants/:tenantId", () => {
     const tenantData = {
       name: "Tenant Name",
       address: "Tenant Address",
@@ -45,7 +45,7 @@ describe("tenent update", () => {
       await tenantRepository.save(tenantData);
 
       await supertest(createServer())
-        .patch("/api/tenant/1")
+        .patch("/api/v1/tenants/1")
         .set("Cookie", [`accessToken=${accessToken}`])
         .send(newTenantData)
         .expect(200)
@@ -61,7 +61,7 @@ describe("tenent update", () => {
       await tenantRepository.save(tenantData);
 
       await supertest(createServer())
-        .patch("/api/tenant/1")
+        .patch("/api/v1/tenants/1")
         .set("Cookie", [`accessToken=${accessToken}`])
         .send(newTenantData)
         .expect(200);
@@ -78,7 +78,7 @@ describe("tenent update", () => {
       await tenantRepository.save(tenantData);
 
       await supertest(createServer())
-        .patch("/api/tenant/1")
+        .patch("/api/v1/tenants/1")
         .send(newTenantData)
         .expect(401);
 
@@ -96,7 +96,7 @@ describe("tenent update", () => {
       await tenantRepository.save(tenantData);
 
       await supertest(createServer())
-        .patch("/api/tenant/1")
+        .patch("/api/v1/tenants/1")
         .set("Cookie", [`accessToken=${accessToken}`])
         .send(newTenantData)
         .expect(403);
@@ -116,15 +116,10 @@ describe("tenent update", () => {
       };
 
       await supertest(createServer())
-        .post("/api/tenant")
+        .patch("/api/v1/tenants/1")
         .set("Cookie", [`accessToken=${accessToken}`])
         .send(tenantData)
         .expect(422);
-
-      const tenantRepository = connection.getRepository(Tenant);
-      const tenants = await tenantRepository.find();
-
-      expect(tenants).toHaveLength(0);
     });
 
     it("should return 422 (Unprocessable Entity) if address filed is missing", async () => {
@@ -135,15 +130,10 @@ describe("tenent update", () => {
       };
 
       await supertest(createServer())
-        .post("/api/tenant")
+        .patch("/api/v1/tenants/1")
         .set("Cookie", [`accessToken=${accessToken}`])
         .send(tenantData)
         .expect(422);
-
-      const tenantRepository = connection.getRepository(Tenant);
-      const tenants = await tenantRepository.find();
-
-      expect(tenants).toHaveLength(0);
     });
   });
 });

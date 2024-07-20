@@ -6,7 +6,7 @@ import createJWKSMock from "mock-jwks";
 import { User } from "@/entity/user";
 import { UserRoles } from "@/constants";
 
-describe("auth self", () => {
+describe("Authentication User Self", () => {
   let connection: DataSource;
   let jwks: ReturnType<typeof createJWKSMock>;
 
@@ -29,12 +29,12 @@ describe("auth self", () => {
     await connection.destroy();
   });
 
-  describe("get /api/auth/self", () => {
+  describe("get /api/v1/user", () => {
     it("should return status 200", async () => {
       const accessToken = jwks.token({ sub: "1", role: UserRoles.CUSTOMER });
 
       await supertest(createServer())
-        .get("/api/auth/self")
+        .get("/api/v1/user")
         .set("Cookie", [`accessToken=${accessToken}`])
         .expect(200)
         .then((res) => {
@@ -61,7 +61,7 @@ describe("auth self", () => {
       const accessToken = jwks.token({ sub: String(user.id), role: user.role });
 
       await supertest(createServer())
-        .get("/api/auth/self")
+        .get("/api/v1/user")
         .set("Cookie", [`accessToken=${accessToken}`])
         .expect(200)
         .then((res) => {
@@ -88,7 +88,7 @@ describe("auth self", () => {
       const accessToken = jwks.token({ sub: String(user.id), role: user.role });
 
       await supertest(createServer())
-        .get("/api/auth/self")
+        .get("/api/v1/user")
         .set("Cookie", [`accessToken=${accessToken}`])
         .expect(200)
         .then((res) => {
@@ -113,7 +113,7 @@ describe("auth self", () => {
         role: UserRoles.CUSTOMER,
       });
 
-      await supertest(createServer()).get("/api/auth/self").expect(401);
+      await supertest(createServer()).get("/api/v1/user").expect(401);
     });
   });
 });

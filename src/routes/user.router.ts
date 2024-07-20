@@ -6,7 +6,10 @@ import { AuthService } from "@/services/auth.service";
 import authenticate from "@/middlewares/authenticate";
 import { canAccess } from "@/middlewares/can-access";
 import { UserRoles } from "@/constants";
-import { userCreateValidator } from "@/lib/validators/user";
+import {
+  userCreateValidator,
+  userSearchQueryValidator,
+} from "@/lib/validators/user";
 import { logger } from "@/config/logger";
 import { UserCreateRequest, UserRequestWithParama } from "@/types";
 
@@ -17,7 +20,7 @@ const authService = new AuthService(userRepository);
 const userController = new UserController(authService, logger);
 
 router.post(
-  "/user",
+  "/users",
   userCreateValidator,
   authenticate,
   canAccess([UserRoles.ADMIN]),
@@ -27,7 +30,7 @@ router.post(
 );
 
 router.patch(
-  "/user/:id",
+  "/users/:userId",
   userCreateValidator,
   authenticate,
   canAccess([UserRoles.ADMIN]),
@@ -37,7 +40,7 @@ router.patch(
 );
 
 router.delete(
-  "/user/:id",
+  "/users/:userId",
   authenticate,
   canAccess([UserRoles.ADMIN]),
   async (req: Request, res: Response, next: NextFunction) => {
@@ -46,7 +49,7 @@ router.delete(
 );
 
 router.get(
-  "/user/:id",
+  "/users/:userId",
   authenticate,
   canAccess([UserRoles.ADMIN]),
   async (req: Request, res: Response, next: NextFunction) => {
@@ -55,11 +58,12 @@ router.get(
 );
 
 router.get(
-  "/user",
+  "/users",
   authenticate,
   canAccess([UserRoles.ADMIN]),
+  userSearchQueryValidator,
   async (req: Request, res: Response, next: NextFunction) => {
-    await userController.indexAll(req as UserRequestWithParama, res, next);
+    await userController.indexAll(req, res, next);
   },
 );
 

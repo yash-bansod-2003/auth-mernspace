@@ -7,7 +7,10 @@ import { AppDataSource } from "@/data-source";
 import { Tenant } from "@/entity/tenant";
 import { TenantService } from "@/services/tenant.service";
 import { AuthenticatedRequest } from "@/types";
-import { tenentCreateValidator } from "@/lib/validators/tenant";
+import {
+  tenentCreateValidator,
+  tenantSearchQueryValidator,
+} from "@/lib/validators/tenant";
 import { logger } from "@/config/logger";
 import authenticate from "@/middlewares/authenticate";
 import { canAccess } from "@/middlewares/can-access";
@@ -19,7 +22,7 @@ const tenantService = new TenantService(tenantRepository);
 const tenantController = new TenantController(tenantService, logger);
 
 router.post(
-  "/tenant",
+  "/tenants",
   tenentCreateValidator,
   authenticate,
   canAccess([UserRoles.ADMIN]),
@@ -29,16 +32,17 @@ router.post(
 );
 
 router.get(
-  "/tenant",
+  "/tenants",
   authenticate,
   canAccess([UserRoles.ADMIN]),
+  tenantSearchQueryValidator,
   async (req: Request, res: Response, next: NextFunction) => {
     await tenantController.indexAll(req as AuthenticatedRequest, res, next);
   },
 );
 
 router.get(
-  "/tenant/:id",
+  "/tenants/:tenantId",
   authenticate,
   canAccess([UserRoles.ADMIN]),
   async (req: Request, res: Response, next: NextFunction) => {
@@ -47,7 +51,7 @@ router.get(
 );
 
 router.patch(
-  "/tenant/:id",
+  "/tenants/:tenantId",
   tenentCreateValidator,
   authenticate,
   canAccess([UserRoles.ADMIN]),
@@ -57,7 +61,7 @@ router.patch(
 );
 
 router.delete(
-  "/tenant/:id",
+  "/tenants/:tenantId",
   authenticate,
   canAccess([UserRoles.ADMIN]),
   async (req: Request, res: Response, next: NextFunction) => {

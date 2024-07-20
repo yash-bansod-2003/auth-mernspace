@@ -6,7 +6,7 @@ import createJWKSMock from "mock-jwks";
 import { Tenant } from "@/entity/tenant";
 import { UserRoles } from "@/constants";
 
-describe("tenent delete", () => {
+describe("Tenant Delete", () => {
   let connection: DataSource;
   let jwks: ReturnType<typeof createJWKSMock>;
 
@@ -29,7 +29,7 @@ describe("tenent delete", () => {
     await connection.destroy();
   });
 
-  describe("delete /api/tenant/:id", () => {
+  describe("delete /api/v1/tenants/:tenantId", () => {
     const tenantData = {
       name: "Tenant Name",
       address: "Tenant Address",
@@ -42,7 +42,7 @@ describe("tenent delete", () => {
       await tenantRepository.save(tenantData);
 
       await supertest(createServer())
-        .delete("/api/tenant/1")
+        .delete("/api/v1/tenants/1")
         .set("Cookie", [`accessToken=${accessToken}`])
         .expect(200)
         .then((res) => {
@@ -57,7 +57,7 @@ describe("tenent delete", () => {
       await tenantRepository.save(tenantData);
 
       await supertest(createServer())
-        .delete("/api/tenant/1")
+        .delete("/api/v1/tenants/1")
         .set("Cookie", [`accessToken=${accessToken}`])
         .expect(200);
 
@@ -70,7 +70,7 @@ describe("tenent delete", () => {
       const tenantRepository = connection.getRepository(Tenant);
       await tenantRepository.save(tenantData);
 
-      await supertest(createServer()).delete("/api/tenant/1").expect(401);
+      await supertest(createServer()).delete("/api/v1/tenants/1").expect(401);
 
       const tenants = await tenantRepository.find();
 
@@ -84,7 +84,7 @@ describe("tenent delete", () => {
       await tenantRepository.save(tenantData);
 
       await supertest(createServer())
-        .delete("/api/tenant/1")
+        .delete("/api/v1/tenants/1")
         .set("Cookie", [`accessToken=${accessToken}`])
         .expect(403);
 

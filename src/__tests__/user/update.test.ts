@@ -7,7 +7,7 @@ import { User } from "@/entity/user";
 import { UserRoles } from "@/constants";
 import { UserData } from "@/types";
 
-describe("user update", () => {
+describe("Admin Update User", () => {
   let connection: DataSource;
   let jwks: ReturnType<typeof createJWKSMock>;
 
@@ -30,7 +30,7 @@ describe("user update", () => {
     await connection.destroy();
   });
 
-  describe("patch /api/user/1", () => {
+  describe("patch /api/v1/admin/users/:userId", () => {
     const userData: UserData = {
       firstName: "yash",
       lastName: "bansod",
@@ -56,7 +56,7 @@ describe("user update", () => {
       await userRepository.save(userData);
 
       await supertest(createServer())
-        .patch("/api/user/1")
+        .patch("/api/v1/admin/users/1")
         .set("Cookie", [`accessToken=${accessToken}`])
         .send(newUserData)
         .expect(200)
@@ -72,7 +72,7 @@ describe("user update", () => {
       await userRepository.save(userData);
 
       await supertest(createServer())
-        .patch("/api/user/1")
+        .patch("/api/v1/admin/users/1")
         .set("Cookie", [`accessToken=${accessToken}`])
         .send(newUserData)
         .expect(200);
@@ -93,7 +93,7 @@ describe("user update", () => {
       await userRepository.save(userData);
 
       await supertest(createServer())
-        .patch("/api/user/1")
+        .patch("/api/v1/admin/users/1")
         .set("Cookie", [`accessToken=${accessToken}`])
         .send(newUserData)
         .expect(403);
@@ -109,7 +109,7 @@ describe("user update", () => {
 
     it("should return status 401 if token does not exists", async () => {
       await supertest(createServer())
-        .patch("/api/user/1")
+        .patch("/api/v1/admin/users/1")
         .send(newUserData)
         .expect(401);
     });

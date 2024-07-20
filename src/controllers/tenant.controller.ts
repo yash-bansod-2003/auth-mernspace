@@ -1,7 +1,11 @@
 import { TenantService } from "@/services/tenant.service";
-import { AuthenticatedRequest, TenantData } from "@/types";
+import {
+  AuthenticatedRequest,
+  TenantData,
+  TenantSearchQueryParams,
+} from "@/types";
 import { NextFunction, Response } from "express";
-import { validationResult } from "express-validator";
+import { matchedData, validationResult } from "express-validator";
 import createHttpError from "http-errors";
 import { Logger } from "winston";
 
@@ -12,7 +16,7 @@ interface TenantCreateRequest extends AuthenticatedRequest {
 export interface TenantWithParams extends TenantCreateRequest {
   body: TenantData;
   params: {
-    id: string;
+    tenantId: string;
   };
 }
 
@@ -47,9 +51,18 @@ class TenantController {
   }
 
   async indexAll(req: AuthenticatedRequest, res: Response, next: NextFunction) {
+    const searchQueryParams = matchedData(req, {
+      onlyValidData: true,
+    }) as TenantSearchQueryParams;
+    const { page, limit } = searchQueryParams;
     try {
-      const tenants = await this.tenantService.findAll();
-      return res.json(tenants);
+      const tenants = await this.tenantService.findAll(searchQueryParams);
+      return res.json({
+        page,
+        limit,
+        count: tenants.length,
+        data: tenants,
+      });
     } catch (error) {
       return next(error);
     }
@@ -57,7 +70,9 @@ class TenantController {
 
   async indexOne(req: AuthenticatedRequest, res: Response, next: NextFunction) {
     try {
-      const tenant = await this.tenantService.findOne(Number(req.params.id));
+      const tenant = await this.tenantService.findOne(
+        Number(req.params.tenantId),
+      );
       return res.json(tenant);
     } catch (error) {
       return next(error);
@@ -67,7 +82,7 @@ class TenantController {
   async update(req: TenantWithParams, res: Response, next: NextFunction) {
     this.logger.debug("New Request to update tenant");
 
-    const tenantId = req.params.id;
+    const tenantId = req.params.tenantId;
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
@@ -97,7 +112,7 @@ class TenantController {
   async destroy(req: TenantWithParams, res: Response, next: NextFunction) {
     this.logger.debug("New Request to delete tenant");
 
-    const tenantId = req.params.id;
+    const tenantId = req.params.tenantId;
 
     if (isNaN(Number(tenantId))) {
       next(createHttpError(400, "Invalid url param."));
