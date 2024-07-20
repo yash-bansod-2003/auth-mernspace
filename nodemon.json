@@ -1,6 +1,6 @@
 {
-  "watch": ["src"],
-  "ext": "ts,json",
+  "watch": ["src", "public"],
+  "ext": "ts,json,yaml",
   "ignore": ["src/**/*.spec.ts"],
   "exec": "cross-env NODE_ENV=development ts-node -r tsconfig-paths/register src/index.ts"
 }
