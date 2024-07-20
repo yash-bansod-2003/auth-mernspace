@@ -12,7 +12,7 @@ import { tenantRouter } from "@/routes/tenant.router";
 import { userRouter } from "@/routes/user.router";
 
 const swaggerFile = fs.readFileSync(
-  path.join(__dirname, "../public/swagger.yaml"),
+  path.join(__dirname, "./config/swagger.yaml"),
   "utf8",
 );
 

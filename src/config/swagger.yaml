@@ -1,0 +1,259 @@
+openapi: 3.0.0
+info:
+  title: "Mernspace Auth Service API"
+  description: "Authentication management service for mernspace food delivering application"
+  version: "1.0.0"
+  termsOfService: "http://swagger.io/terms/"
+  contact:
+    name: "Yash Bansod"
+    email: "yashbansod2020@gmail.com"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+
+servers:
+  - url: "http://localhost:5001"
+    description: "Development server"
+
+schemas: [http, https]
+
+paths:
+  /api/v1/register:
+    post:
+      tags:
+        - "Authentication"
+      summary: "Register"
+      description: "Register a new user"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                firstName:
+                  type: string
+                  example: "Yash"
+                lastName:
+                  type: string
+                  examole: "Bansod"
+                email:
+                  type: string
+                  example: "johndeo@example.com"
+                password:
+                  type: string
+                  example: ""
+              required:
+                - firstName
+                - lastName
+                - email
+                - password
+      responses:
+        "201":
+          description: "New user has been created"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+        "422":
+          description: "Validation errors"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        type:
+                          type: string
+                          example: "field"
+                        msg:
+                          type: string
+                          example: "Password must be at least 8 characters"
+                        path:
+                          type: string
+                          nullable: true
+                          example: "password"
+                        location:
+                          type: string
+                          example: "body"
+                      required:
+                        - msg
+        "409":
+          description: "Conflict"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        type:
+                          type: string
+                          example: "ConflictError"
+                        msg:
+                          type: string
+                          example: "email already exists"
+                        path:
+                          type: string
+                          example: ""
+                        location:
+                          type: string
+                          example: ""
+                      required:
+                        - msg
+
+  /api/v1/login:
+    post:
+      tags:
+        - "Authentication"
+      summary: "Login"
+      description: "Login a user"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: "johndeo@example.com"
+                password:
+                  type: string
+                  example: ""
+              required:
+                - email
+                - password
+
+      responses:
+        "200":
+          description: "Login Successfull"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+          headers:
+            Set-Cookie:
+              schema:
+                type: string
+                example: "{accessToken=eyJhbGciOiJIUzI1.eyJzdWIiOiIxMjM0NTY3ODkwI.SflKxwRJSMeKKF2QT4fwpMeJf3, refreshToken=eyJhbGciOiJIUzI1.eyJzdWIiOiIxMjM0NTY3ODkwI.SflKxwRJSMeKKF2QT4fwpMeJf3}"
+        "422":
+          description: "Validation errors"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        type:
+                          type: string
+                          example: "field"
+                        msg:
+                          type: string
+                          example: "email is required field"
+                        path:
+                          type: string
+                          nullable: true
+                          example: "email"
+                        location:
+                          type: string
+                          example: "body"
+                      required:
+                        - msg
+        "404":
+          description: "Not Found"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        type:
+                          type: string
+                          example: "NotFoundError"
+                        msg:
+                          type: string
+                          example: "user not found"
+                        path:
+                          type: string
+                          example: ""
+                        location:
+                          type: string
+                          example: ""
+                      required:
+                        - msg
+
+  /api/v1/user:
+    get:
+      tags:
+        - "Authentication"
+      summary: "Self"
+      description: "Retrieve self data including first name, last name, ID, and email"
+      responses:
+        "200":
+          description: "Successfull request"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  firstName:
+                    type: string
+                    example: "John"
+                  lastName:
+                    type: string
+                    example: "Doe"
+                  email:
+                    type: string
+                    example: "john.doe@example.com"
+
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        type:
+                          type: string
+                          example: "UnauthorizedError"
+                        msg:
+                          type: string
+                          example: "No authorization token was found"
+                        path:
+                          type: string
+                          example: ""
+                        location:
+                          type: string
+                          example: ""
